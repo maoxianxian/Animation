@@ -161,7 +161,10 @@ bool Tokenizer::GetToken(char *str) {
 		c=CheckChar();
 	}
 	str[pos]='\0';
-	return true;
+	if (feof((FILE*)File))
+		return false;
+	else
+		return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

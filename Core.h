@@ -16,6 +16,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
 // Set up GLEW
 //#define GLEW_STATIC
 //#pragma comment(lib, "glew32s.lib")
