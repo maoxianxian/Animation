@@ -11,9 +11,9 @@ Joint::Joint() {
 	DOFs.push_back(zDOF);
 }
 
-void Joint::loadBox(float min, float max)
+void Joint::load( min, float max)
 {
-
+	minBox
 }
 void Joint::Draw(const glm::mat4 &viewProjMtx, const glm::mat4 &parentMat, uint shader) {
 	glUseProgram(shader);
