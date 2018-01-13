@@ -2,6 +2,8 @@
 #include "core.h"
 #include "DOF.h"
 #include "Model.h"
+#include "Tokenizer.h"
+
 class Joint {
 public:
 	glm::mat4x4 WorldMtx;
@@ -9,10 +11,11 @@ public:
 	Model model;
 	glm::vec3 minBox;
 	glm::vec3 maxBox;
+	glm::vec3 offset;
 	std::vector<DOF*> DOFs;
 	std::vector<Joint*> children;
 	Joint();
 	void Draw(const glm::mat4 &viewProjMtx, const glm::mat4 &parentMat, uint shader);
 	void Update();
-	void loadBox();
+	void Load(Tokenizer &scanner);
 };

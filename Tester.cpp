@@ -65,7 +65,14 @@ Tester::Tester(const char *windowTitle,int argc,char **argv) {
 	Program=new ShaderProgram("../Model.glsl",ShaderProgram::eRender);
 	Cube=new SpinningCube;
 	Cam=new Camera;
-	Skelet = new Skeleton("../test.skel.txt");
+	//std::cout << argc << " " << argv[1] << std::endl;
+	if (argc == 1) {
+		Skelet = new Skeleton("../test.skel.txt");
+	}
+	else
+	{
+		Skelet = new Skeleton(argv[1]);
+	}
 	Cam->SetAspect(float(WinX)/float(WinY));
 }
 
@@ -107,7 +114,7 @@ void Tester::Draw() {
 	// Begin drawing scene
 	glViewport(0, 0, WinX, WinY);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	Skelet->Draw(Cam->GetViewProjectMtx(), Program->GetProgramID());
 	// Draw components
 	//Cube->Draw(Cam->GetViewProjectMtx(),Program->GetProgramID());
 

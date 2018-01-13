@@ -1,5 +1,4 @@
 #include "Joint.h"
-
 Joint::Joint() {
 	LocalMtx = glm::mat4(1.0f);
 	WorldMtx = glm::mat4(1.0f);
@@ -11,13 +10,104 @@ Joint::Joint() {
 	DOFs.push_back(zDOF);
 }
 
-void Joint::load( min, float max)
+void Joint::Load(Tokenizer &scanner)
 {
-	minBox
+	bool end = false;
+	while (!end)
+	{
+		char buffer[64];
+		end = !scanner.GetToken(buffer);
+		//std::cout << buffer << std::endl;
+		if (std::string(buffer) == "balljoint")
+		{
+			Joint * temp = new Joint();
+			temp->Load(scanner);
+			children.push_back(temp);
+		}
+		else if (std::string(buffer) == "}")
+		{
+			model.MakeBox(minBox, maxBox);
+			//std::cout << minBox.x << " " << minBox.y << " " << minBox.z << " " << std::endl;
+			//std::cout << maxBox.x << " " << maxBox.y << " " << maxBox.z << " " << std::endl;
+			return;
+		}
+		else if (std::string(buffer) == "offset")
+		{
+			float x = scanner.GetFloat();
+			float y = scanner.GetFloat();
+			float z = scanner.GetFloat();
+			offset = glm::vec3(x, y, z);
+			//std::cout << "offset " <<" "<<x <<" "<<y<<" "<<z << std::endl;
+		}
+		else if (std::string(buffer) == "boxmin")
+		{
+			float x = scanner.GetFloat();
+			float y = scanner.GetFloat();
+			float z = scanner.GetFloat();
+			minBox = glm::vec3(x,y,z);
+			//std::cout << "boxmin " << " " << x << " " << y << " " << z << std::endl;
+		}
+		else if (std::string(buffer) == "boxmax")
+		{
+			float x = scanner.GetFloat();
+			float y = scanner.GetFloat();
+			float z = scanner.GetFloat();
+			maxBox = glm::vec3(x, y, z);
+			//std::cout << "boxmax " << " " << x << " " << y << " " << z << std::endl;
+		}
+		else if (std::string(buffer) == "pose")
+		{
+			float x = scanner.GetFloat();
+			float y = scanner.GetFloat();
+			float z = scanner.GetFloat();
+			DOFs[0]->val = x;
+			DOFs[1]->val = y;
+			DOFs[2]->val = z;
+			//std::cout << "pose " << " " << x << " " << y << " " << z << std::endl;
+		}
+		else if (std::string(buffer) == "rotxlimit")
+		{
+			float min = scanner.GetFloat();
+			float max = scanner.GetFloat();
+			DOFs[0]->min = min;
+			DOFs[0]->max = max;
+			//std::cout << "rotx " << " " << min << " " <<max << std::endl;
+		}
+		else if (std::string(buffer) == "rotylimit")
+		{
+			float min = scanner.GetFloat();
+			float max = scanner.GetFloat();
+			DOFs[1]->min = min;
+			DOFs[1]->max = max;
+			//std::cout << "roty " << " " << min << " " << max << std::endl;
+		}
+		else if (std::string(buffer) == "rotzlimit")
+		{
+			float min = scanner.GetFloat();
+			float max = scanner.GetFloat();
+			DOFs[2]->min = min;
+			DOFs[2]->max = max;
+			//std::cout << "rotx " << " " << min << " " << max << std::endl;
+		}
+	}
 }
 void Joint::Draw(const glm::mat4 &viewProjMtx, const glm::mat4 &parentMat, uint shader) {
-	glUseProgram(shader);
-	glUniformMatrix4fv(glGetUniformLocation(shader, "ModelMtx"), 1, false, (float*)&(LocalMtx*parentMat));
-	glm::mat4 mvpMtx = viewProjMtx * LocalMtx*parentMat;
-	glUniformMatrix4fv(glGetUniformLocation(shader, "ModelViewProjMtx"), 1, false, (float*)&mvpMtx);
+	LocalMtx = glm::mat4(1.0f);
+	LocalMtx = LocalMtx*glm::rotate(glm::mat4(1.0f), DOFs[0]->val, glm::vec3(1, 0, 0));
+	LocalMtx = LocalMtx*glm::rotate(glm::mat4(1.0f), DOFs[1]->val, glm::vec3(0, 1, 0));
+	LocalMtx = LocalMtx*glm::rotate(glm::mat4(1.0f), DOFs[2]->val, glm::vec3(0, 0, 1));
+	LocalMtx = glm::translate(glm::mat4(1.0f), offset)*LocalMtx;
+	model.Draw(parentMat*LocalMtx, viewProjMtx, shader);
+	for (int i = 0; i < children.size(); i++)
+	{
+		children[i]->Draw(viewProjMtx, parentMat*LocalMtx, shader);
+	}
+}
+
+void Joint::Update()
+{
+	for (int i = 0; i < children.size(); i++)
+	{
+		children[i]->Update();
+	}
 }
