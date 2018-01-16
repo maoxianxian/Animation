@@ -1,0 +1,63 @@
+balljoint house {
+	offset 0 0 0
+	boxmin -0.5 -0.4 -0.25
+	boxmax 0.5 0.25 0.25
+	pose 0 0 0
+	balljoint lid {
+		offset 0 0.3 0
+		boxmin -0.7 -0.05 -0.35
+		boxmax 0.7 0.05 0.35
+		balljoint fronttop {
+			offset 0 0.2 0.2
+			boxmin -0.7 -0.05 -0.3
+			boxmax 0.7 0.05 0.3
+			pose 0.8 0 0
+		}
+		balljoint backtop {
+			offset 0 0.2 -0.2
+			boxmin -0.7 -0.05 -0.3
+			boxmax 0.7 0.05 0.3
+			pose -0.8 0 0
+		}
+		balljoint toplv1 {
+			offset 0 0.06 0
+			boxmin -0.7 -0.04 -0.3
+			boxmax 0.7 0.04 0.3
+		}
+		balljoint toplv2 {
+			offset 0 0.14 0
+			boxmin -0.7 -0.04 -0.25
+			boxmax 0.7 0.04 0.25
+		}
+		balljoint toplv3 {
+			offset 0 0.2 0
+			boxmin -0.7 -0.03 -0.2
+			boxmax 0.7 0.03 0.2
+		}
+		balljoint toplv3 {
+			offset 0 0.26 0
+			boxmin -0.7 -0.03 -0.15
+			boxmax 0.7 0.03 0.15
+		}
+		balljoint toplv4 {
+			offset 0 0.32 0
+			boxmin -0.7 -0.03 -0.1
+			boxmax 0.7 0.03 0.1
+		}
+	}
+	balljoint button {
+		offset 0 -0.45 0
+		boxmin -1 -0.01 -0.5
+		boxmax 1 0.01 0.5
+	}
+	balljoint window {
+		offset 0.2 0 0.3
+		boxmin -0.2 -0.2 -0.05
+		boxmax 0.2 0.2 0.05
+	}
+	balljoint chimney {
+		offset -0.3 0.8 0.1
+		boxmin -0.1 -0.3 -0.1
+		boxmax 0.1 0.3 0.1
+	}
+}
