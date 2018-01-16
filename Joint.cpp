@@ -60,9 +60,9 @@ void Joint::Load(Tokenizer &scanner)
 			float x = scanner.GetFloat();
 			float y = scanner.GetFloat();
 			float z = scanner.GetFloat();
-			DOFs[0]->val = x;
-			DOFs[1]->val = y;
-			DOFs[2]->val = z;
+			DOFs[0]->setval(x);
+			DOFs[1]->setval(y);
+			DOFs[2]->setval(z);
 			//std::cout << "pose " << " " << x << " " << y << " " << z << std::endl;
 		}
 		else if (std::string(buffer) == "rotxlimit")
@@ -93,9 +93,9 @@ void Joint::Load(Tokenizer &scanner)
 }
 void Joint::Draw(const glm::mat4 &viewProjMtx, const glm::mat4 &parentMat, uint shader) {
 	LocalMtx = glm::mat4(1.0f);
-	LocalMtx = LocalMtx*glm::rotate(glm::mat4(1.0f), DOFs[0]->val, glm::vec3(1, 0, 0));
-	LocalMtx = LocalMtx*glm::rotate(glm::mat4(1.0f), DOFs[1]->val, glm::vec3(0, 1, 0));
 	LocalMtx = LocalMtx*glm::rotate(glm::mat4(1.0f), DOFs[2]->val, glm::vec3(0, 0, 1));
+	LocalMtx = LocalMtx*glm::rotate(glm::mat4(1.0f), DOFs[1]->val, glm::vec3(0, 1, 0));
+	LocalMtx = LocalMtx*glm::rotate(glm::mat4(1.0f), DOFs[0]->val, glm::vec3(1, 0, 0));
 	LocalMtx = glm::translate(glm::mat4(1.0f), offset)*LocalMtx;
 	model.Draw(parentMat*LocalMtx, viewProjMtx, shader);
 	for (int i = 0; i < children.size(); i++)

@@ -4,5 +4,6 @@ public:
 	float min;
 	float max;
 	DOF(float val, float min, float max);
+	void setval(float value);
 };
 
