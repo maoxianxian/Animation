@@ -10,7 +10,7 @@ Joint::Joint() {
 	DOFs.push_back(zDOF);
 }
 
-void Joint::Load(Tokenizer &scanner)
+void Joint::Load(Tokenizer &scanner, std::vector<Joint*> &joints)
 {
 	bool end = false;
 	while (!end)
@@ -21,7 +21,8 @@ void Joint::Load(Tokenizer &scanner)
 		if (std::string(buffer) == "balljoint")
 		{
 			Joint * temp = new Joint();
-			temp->Load(scanner);
+			joints.push_back(temp);
+			temp->Load(scanner, joints);
 			children.push_back(temp);
 		}
 		else if (std::string(buffer) == "}")
@@ -97,7 +98,8 @@ void Joint::Draw(const glm::mat4 &viewProjMtx, const glm::mat4 &parentMat, uint 
 	LocalMtx = LocalMtx*glm::rotate(glm::mat4(1.0f), DOFs[1]->val, glm::vec3(0, 1, 0));
 	LocalMtx = LocalMtx*glm::rotate(glm::mat4(1.0f), DOFs[0]->val, glm::vec3(1, 0, 0));
 	LocalMtx = glm::translate(glm::mat4(1.0f), offset)*LocalMtx;
-	model.Draw(parentMat*LocalMtx, viewProjMtx, shader);
+	WorldMtx = parentMat*LocalMtx;
+	model.Draw(WorldMtx , viewProjMtx, shader);
 	for (int i = 0; i < children.size(); i++)
 	{
 		children[i]->Draw(viewProjMtx, parentMat*LocalMtx, shader);

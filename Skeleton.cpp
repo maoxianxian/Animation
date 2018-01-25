@@ -14,7 +14,8 @@ void Skeleton::Load(const char * filename)
 	if (std::string(buffer) == "balljoint")
 	{
 		Joint * temp = new Joint();
-		temp->Load(scanner);
+		joints.push_back(temp);
+		temp->Load(scanner, joints);
 		root = temp;
 	}
 }
@@ -26,4 +27,8 @@ void Skeleton::Draw(const glm::mat4 &viewProjMtx, uint shader) {
 void Skeleton::Update()
 {
 	root->Update();
+}
+
+glm::mat4 Skeleton::GetWorldMatrix(int i) {
+	return joints[i]->WorldMtx;
 }

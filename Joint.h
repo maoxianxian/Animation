@@ -17,5 +17,5 @@ public:
 	Joint();
 	void Draw(const glm::mat4 &viewProjMtx, const glm::mat4 &parentMat, uint shader);
 	void Update();
-	void Load(Tokenizer &scanner);
+	void Load(Tokenizer &scanner, std::vector<Joint*> &joints);
 };
