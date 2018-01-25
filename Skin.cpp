@@ -64,3 +64,12 @@ void Skin::Load(const char * filename)
 	}
 }
 
+void Skin::Draw(const glm::mat4 &viewProjMtx, uint shader)
+{
+	/*glUseProgram(shader);
+	glUniformMatrix4fv(glGetUniformLocation(shader, "ModelMtx"), 1, false, (float*)&modelMtx);
+
+	glm::mat4 mvpMtx = viewProjMtx * modelMtx;
+	glUniformMatrix4fv(glGetUniformLocation(shader, "ModelViewProjMtx"), 1, false, (float*)&mvpMtx);*/
+}
+

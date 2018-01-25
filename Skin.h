@@ -10,7 +10,7 @@ public:
 	~Skin();
 	void Load(const char * filename);
 	void Update();
-	void Draw();
+	void Draw(const glm::mat4 &viewProjMtx, uint shader);
 	uint VertexBuffer;
 	uint IndexBuffer;
 	//std::vector<
