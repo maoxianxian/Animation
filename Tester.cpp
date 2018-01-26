@@ -72,7 +72,7 @@ Tester::Tester(const char *windowTitle,int argc,char **argv) {
 	{
 		Skelet = new Skeleton(argv[1]);
 	}
-	skin = new Skin("../tube_smooth.skin.txt", Skelet);
+	skin = new Skin("../wasp.skin.txt", Skelet);
 	Cam->SetAspect(float(WinX)/float(WinY));
 }
 
@@ -117,7 +117,7 @@ void Tester::Draw() {
 	// Begin drawing scene
 	glViewport(0, 0, WinX, WinY);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	Skelet->Draw(Cam->GetViewProjectMtx(), Program->GetProgramID());
+	//Skelet->Draw(Cam->GetViewProjectMtx(), Program->GetProgramID());
 	// Draw components
 	skin->Draw(Cam->GetViewProjectMtx(), Program->GetProgramID());
 	// Finish drawing scene

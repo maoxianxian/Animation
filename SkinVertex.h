@@ -9,7 +9,7 @@ public:
 	glm::vec3 localPosition;
 	glm::vec3 WorldPosition;
 	std::vector<attachment> attaches;
-
+	glm::vec3 Worldnormal;
 	glm::vec3 normal;
 	int index;
 	SkinVertex(float x, float y, float z, int i);

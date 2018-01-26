@@ -134,12 +134,18 @@ void Skin::Load(const char * filename)
 			float a11 = scanner.GetFloat();
 			float a12 = scanner.GetFloat();
 
-
-			binds.push_back(glm::mat4(a1, a2, a3,0, a4,
-					  a5, a6,0, a7, a8, 
-				      a9,0, a10, a11, a12,1 
-					  ));
+			binds.push_back(
+			glm::mat4(a1, a2, a3,0,
+				a4, a5, a6,0,
+				a7, a8, a9,0, 
+				a10, a11, a12,1 ));
 			scanner.GetToken(buffer);//}
+			/*binds.push_back(
+				glm::mat4(a1, a4, a7, a10,
+					a2, a5, a8, a11,
+					a3, a6, a9, a12,
+					0, 0, 0, 1)); */
+
 		}
 		scanner.GetToken(buffer);//}
 	}
@@ -192,7 +198,7 @@ void Skin::Update()
 	vtx.clear();
 	for (int i = 0; i < numberOfVertex; i++)
 	{
-		vtx.push_back({ vertices[i]->calculatePos(binds,skel),vertices[i]->normal });
+		vtx.push_back({ vertices[i]->calculatePos(binds,skel),vertices[i]->Worldnormal });
 	}
 	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, vtx.size() * sizeof(ModelVertex), &vtx[0], GL_STATIC_DRAW);
