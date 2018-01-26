@@ -8,7 +8,7 @@
 #include "Camera.h"
 #include "SpinningCube.h"
 #include "Skeleton.h"
-
+#include "Skin.h"
 ////////////////////////////////////////////////////////////////////////////////
 
 // The 'Tester' is a simple top level application class. It creates and manages a
@@ -46,6 +46,7 @@ private:
 	SpinningCube *Cube;
 	Camera *Cam;
 	Skeleton *Skelet;
+	Skin *skin;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

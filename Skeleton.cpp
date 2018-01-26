@@ -18,15 +18,16 @@ void Skeleton::Load(const char * filename)
 		temp->Load(scanner, joints);
 		root = temp;
 	}
+	scanner.Close();
 }
 
 void Skeleton::Draw(const glm::mat4 &viewProjMtx, uint shader) {
-	root->Draw(viewProjMtx,glm::mat4(1.0f),shader);
+	root->Draw(viewProjMtx,shader);
 }
 
 void Skeleton::Update()
 {
-	root->Update();
+	root->Update(glm::mat4(1.0f));
 }
 
 glm::mat4 Skeleton::GetWorldMatrix(int i) {

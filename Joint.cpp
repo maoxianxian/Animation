@@ -28,8 +28,6 @@ void Joint::Load(Tokenizer &scanner, std::vector<Joint*> &joints)
 		else if (std::string(buffer) == "}")
 		{
 			model.MakeBox(minBox, maxBox);
-			//std::cout << minBox.x << " " << minBox.y << " " << minBox.z << " " << std::endl;
-			//std::cout << maxBox.x << " " << maxBox.y << " " << maxBox.z << " " << std::endl;
 			return;
 		}
 		else if (std::string(buffer) == "offset")
@@ -92,24 +90,24 @@ void Joint::Load(Tokenizer &scanner, std::vector<Joint*> &joints)
 		}
 	}
 }
-void Joint::Draw(const glm::mat4 &viewProjMtx, const glm::mat4 &parentMat, uint shader) {
+void Joint::Draw(const glm::mat4 &viewProjMtx, uint shader) {
+	model.Draw(WorldMtx , viewProjMtx, shader);
+	for (int i = 0; i < children.size(); i++)
+	{
+		children[i]->Draw(viewProjMtx, shader);
+	}
+}
+
+void Joint::Update(const glm::mat4 &parentMat)
+{
+	WorldMtx = parentMat*LocalMtx;
 	LocalMtx = glm::mat4(1.0f);
 	LocalMtx = LocalMtx*glm::rotate(glm::mat4(1.0f), DOFs[2]->val, glm::vec3(0, 0, 1));
 	LocalMtx = LocalMtx*glm::rotate(glm::mat4(1.0f), DOFs[1]->val, glm::vec3(0, 1, 0));
 	LocalMtx = LocalMtx*glm::rotate(glm::mat4(1.0f), DOFs[0]->val, glm::vec3(1, 0, 0));
 	LocalMtx = glm::translate(glm::mat4(1.0f), offset)*LocalMtx;
-	WorldMtx = parentMat*LocalMtx;
-	model.Draw(WorldMtx , viewProjMtx, shader);
 	for (int i = 0; i < children.size(); i++)
 	{
-		children[i]->Draw(viewProjMtx, parentMat*LocalMtx, shader);
-	}
-}
-
-void Joint::Update()
-{
-	for (int i = 0; i < children.size(); i++)
-	{
-		children[i]->Update();
+		children[i]->Update(WorldMtx);
 	}
 }

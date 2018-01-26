@@ -65,7 +65,6 @@ Tester::Tester(const char *windowTitle,int argc,char **argv) {
 	Program=new ShaderProgram("../Model.glsl",ShaderProgram::eRender);
 	Cube=new SpinningCube;
 	Cam=new Camera;
-	//std::cout << argc << " " << argv[1] << std::endl;
 	if (argc == 1) {
 		Skelet = new Skeleton("../test.skel.txt");
 	}
@@ -73,6 +72,7 @@ Tester::Tester(const char *windowTitle,int argc,char **argv) {
 	{
 		Skelet = new Skeleton(argv[1]);
 	}
+	skin = new Skin("../tube_smooth.skin.txt", Skelet);
 	Cam->SetAspect(float(WinX)/float(WinY));
 }
 
@@ -82,7 +82,8 @@ Tester::~Tester() {
 	delete Program;
 	delete Cube;
 	delete Cam;
-
+	delete Skelet;
+	delete skin;
 	glFinish();
 	glutDestroyWindow(WindowHandle);
 }
@@ -93,7 +94,9 @@ void Tester::Update() {
 	// Update the components in the world
 	Cube->Update();
 	Cam->Update();
+	Skelet->Update();
 
+	skin->Update();
 	// Tell glut to re-display the scene
 	glutSetWindow(WindowHandle);
 	glutPostRedisplay();
@@ -116,8 +119,7 @@ void Tester::Draw() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	Skelet->Draw(Cam->GetViewProjectMtx(), Program->GetProgramID());
 	// Draw components
-	//Cube->Draw(Cam->GetViewProjectMtx(),Program->GetProgramID());
-
+	skin->Draw(Cam->GetViewProjectMtx(), Program->GetProgramID());
 	// Finish drawing scene
 	glFinish();
 	glutSwapBuffers();

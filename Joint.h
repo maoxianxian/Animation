@@ -15,7 +15,7 @@ public:
 	std::vector<DOF*> DOFs;
 	std::vector<Joint*> children;
 	Joint();
-	void Draw(const glm::mat4 &viewProjMtx, const glm::mat4 &parentMat, uint shader);
-	void Update();
+	void Draw(const glm::mat4 &viewProjMtx, uint shader);
+	void Update(const glm::mat4 &parentMat);
 	void Load(Tokenizer &scanner, std::vector<Joint*> &joints);
 };

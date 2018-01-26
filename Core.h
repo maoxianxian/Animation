@@ -31,3 +31,4 @@ typedef unsigned int uint;
 // STD library
 #include <vector>
 #include <ctype.h>
+#include <string>
