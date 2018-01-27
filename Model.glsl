@@ -35,9 +35,11 @@ void main() {
 in vec3 fragPosition;
 in vec3 fragNormal;
 
-uniform vec3 AmbientColor=vec3(0.2);
-uniform vec3 LightDirection=normalize(vec3(1,5,2));
-uniform vec3 LightColor=vec3(1);
+uniform vec3 AmbientColor=vec3(0.5);
+uniform vec3 LightDirection=normalize(vec3(1,0,0));
+uniform vec3 LightTwoDirection=normalize(vec3(-1,0,0));
+uniform vec3 LightColor=vec3(0,0,0.6);
+uniform vec3 LightTwoColor=vec3(0,0.6,0);
 uniform vec3 DiffuseColor=vec3(0.5);
 
 out vec3 finalColor;
@@ -48,13 +50,13 @@ out vec3 finalColor;
 
 void main() {
 	// Compute irradiance (sum of ambient & direct lighting)
-	vec3 irradiance=AmbientColor + LightColor * max(0,dot(LightDirection,fragNormal));
+	vec3 irradiance=AmbientColor + LightColor * max(0,dot(-LightDirection,fragNormal))+LightTwoColor * max(0,dot(-LightTwoDirection,fragNormal));
 
 	// Diffuse reflectance
 	vec3 reflectance=irradiance * DiffuseColor;
 
 	// Gamma correction
-	gl_FragColor=vec4(sqrt(reflectance),1);
+	gl_FragColor=vec4(reflectance,1);
 }
 
 #endif

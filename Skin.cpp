@@ -168,7 +168,7 @@ void Skin::Load(const char * filename)
 void Skin::Draw(const glm::mat4 &viewProjMtx, uint shader)
 {
 	//std::cout << vtx.size() << " " << idx.size() << std::endl;
-	//std::cout << vtx[0].Position[0] << std::endl;
+	//std::cout << vtx[239].Position[0]<<" "<< vtx[239].Position[1]<<" "<< vtx[239].Position[2] << std::endl;
 	glUseProgram(shader);
 	glUniformMatrix4fv(glGetUniformLocation(shader, "ModelMtx"), 1, false, (float*)&(glm::mat4(1.0f)));
 	glm::mat4 mvpMtx = viewProjMtx;
@@ -182,8 +182,7 @@ void Skin::Draw(const glm::mat4 &viewProjMtx, uint shader)
 	uint normLoc = 1;
 	glEnableVertexAttribArray(normLoc);
 	glVertexAttribPointer(normLoc, 3, GL_FLOAT, GL_FALSE, sizeof(ModelVertex), (void*)12);
-	glDrawElements(GL_TRIANGLES, numberOfTriangle, GL_UNSIGNED_INT, 0);
-
+	glDrawElements(GL_TRIANGLES, numberOfTriangle*3, GL_UNSIGNED_INT, 0);
 	glDisableVertexAttribArray(normLoc);
 	glDisableVertexAttribArray(posLoc);
 

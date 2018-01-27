@@ -66,13 +66,14 @@ Tester::Tester(const char *windowTitle,int argc,char **argv) {
 	Cube=new SpinningCube;
 	Cam=new Camera;
 	if (argc == 1) {
-		Skelet = new Skeleton("../test.skel.txt");
+		Skelet = new Skeleton("../wasp.skel.txt");
+		skin = new Skin("../wasp.skin.txt", Skelet);
 	}
 	else
 	{
 		Skelet = new Skeleton(argv[1]);
+		skin = new Skin(argv[2], Skelet);
 	}
-	skin = new Skin("../wasp.skin.txt", Skelet);
 	Cam->SetAspect(float(WinX)/float(WinY));
 }
 
