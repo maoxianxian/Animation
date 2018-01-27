@@ -15,20 +15,10 @@ glm::vec3 SkinVertex::calculatePos(std::vector<glm::mat4> &binds, Skeleton* skel
 	Worldnormal = glm::vec3(0, 0, 0);
 	for (int i = 0; i < attaches.size(); i++)
 	{		
-		WorldPosition += attaches[i].weight*glm::vec3((skel->GetWorldMatrix(attaches[i].jointId)*glm::inverse(binds[i]))*glm::vec4(localPosition,1));
+		WorldPosition += attaches[i].weight*glm::vec3((skel->GetWorldMatrix(attaches[i].jointId)*glm::inverse(binds[attaches[i].jointId]))*glm::vec4(localPosition,1));
 		Worldnormal += attaches[i].weight*glm::vec3(glm::mat3(skel->GetWorldMatrix(attaches[i].jointId)*glm::inverse(binds[i]))*normal);
 	}
 	Worldnormal = glm::normalize(Worldnormal);
-	/*if (attaches.size() == 2) {
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
-				std::cout << glm::inverse(binds[1])[j][i];
-			}
-			std::cout << std::endl;
-		}
-		std::cout << std::endl;
-	}*/
-	//std::cout << WorldPosition.x << " " << WorldPosition.y << " " << WorldPosition.z << std::endl;
 	return WorldPosition;
 }
 

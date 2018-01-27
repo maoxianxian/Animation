@@ -72,6 +72,7 @@ void Skin::Load(const char * filename)
 		for (int i = 0; i < numberOfVertex; i++)
 		{
 			int numAttach = scanner.GetInt();
+			//std::cout << numAttach << std::endl;
 			for (int j = 0; j < numAttach; j++)
 			{
 				int id = scanner.GetInt();
@@ -145,6 +146,12 @@ void Skin::Load(const char * filename)
 					a2, a5, a8, a11,
 					a3, a6, a9, a12,
 					0, 0, 0, 1)); */
+			/*binds.push_back(
+			glm::mat4(a1, a2, a3, a4,
+			a5, a6, a7, a8,
+			a9, a10, a11, a12,
+			0, 0, 0, 1)); */
+
 
 		}
 		scanner.GetToken(buffer);//}
@@ -167,8 +174,7 @@ void Skin::Load(const char * filename)
 
 void Skin::Draw(const glm::mat4 &viewProjMtx, uint shader)
 {
-	//std::cout << vtx.size() << " " << idx.size() << std::endl;
-	//std::cout << vtx[239].Position[0]<<" "<< vtx[239].Position[1]<<" "<< vtx[239].Position[2] << std::endl;
+	std::cout << std::endl;
 	glUseProgram(shader);
 	glUniformMatrix4fv(glGetUniformLocation(shader, "ModelMtx"), 1, false, (float*)&(glm::mat4(1.0f)));
 	glm::mat4 mvpMtx = viewProjMtx;
