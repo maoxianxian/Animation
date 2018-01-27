@@ -112,3 +112,8 @@ void Joint::Update(const glm::mat4 &parentMat)
 		children[i]->Update(WorldMtx);
 	}
 }
+
+void Joint::UpdateDOF(int dof, float amount)
+{
+	DOFs[dof]->setval(DOFs[dof]->val + amount);
+}

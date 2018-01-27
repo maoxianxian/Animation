@@ -152,6 +152,36 @@ void Tester::Keyboard(int key,int x,int y) {
 		case 'r':
 			Reset();
 			break;
+		case '=':
+			if (focusJoint < Skelet->joints.size()-1)
+			{
+				focusJoint++;
+			}
+			break;
+		case '-':
+			if (focusJoint > 0)
+			{
+				focusJoint--;
+			}
+			break;
+		case '1':
+			Skelet->UpdateJoint(focusJoint, 0, 0.1);
+			break;
+		case '2':
+			Skelet->UpdateJoint(focusJoint, 0, -0.1);
+			break;
+		case '3':
+			Skelet->UpdateJoint(focusJoint, 1, 0.1);
+			break;
+		case '4':
+			Skelet->UpdateJoint(focusJoint, 1, -0.1);
+			break;
+		case '5':
+			Skelet->UpdateJoint(focusJoint, 2, 0.1);
+			break;
+		case '6':
+			Skelet->UpdateJoint(focusJoint, 2, -0.1);
+			break;
 	}
 }
 

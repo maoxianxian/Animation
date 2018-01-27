@@ -18,4 +18,5 @@ public:
 	void Draw(const glm::mat4 &viewProjMtx, uint shader);
 	void Update(const glm::mat4 &parentMat);
 	void Load(Tokenizer &scanner, std::vector<Joint*> &joints);
+	void UpdateDOF(int dof, float amount);
 };

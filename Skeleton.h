@@ -10,4 +10,5 @@ public:
 	void Update();
 	void Draw(const glm::mat4 &viewProjMtx, uint shader);
 	glm::mat4 GetWorldMatrix(int i);
+	void UpdateJoint(int index, int dof, float amount);
 };

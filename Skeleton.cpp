@@ -33,3 +33,7 @@ void Skeleton::Update()
 glm::mat4 Skeleton::GetWorldMatrix(int i) {
 	return joints[i]->WorldMtx;
 }
+
+void Skeleton::UpdateJoint(int index, int dof, float amount) {
+	joints[index]->UpdateDOF(dof, amount);
+}
