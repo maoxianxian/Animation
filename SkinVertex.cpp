@@ -16,7 +16,7 @@ glm::vec3 SkinVertex::calculatePos(std::vector<glm::mat4> &binds, Skeleton* skel
 	for (int i = 0; i < attaches.size(); i++)
 	{		
 		WorldPosition += attaches[i].weight*glm::vec3((skel->GetWorldMatrix(attaches[i].jointId)*glm::inverse(binds[attaches[i].jointId]))*glm::vec4(localPosition,1));
-		Worldnormal += attaches[i].weight*glm::vec3(glm::mat3(skel->GetWorldMatrix(attaches[i].jointId)*glm::inverse(binds[i]))*normal);
+		Worldnormal += attaches[i].weight*glm::vec3(glm::mat3(skel->GetWorldMatrix(attaches[i].jointId)*glm::inverse(binds[attaches[i].jointId]))*normal);
 	}
 	Worldnormal = glm::normalize(Worldnormal);
 	return WorldPosition;
