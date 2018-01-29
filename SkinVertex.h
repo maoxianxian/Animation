@@ -11,6 +11,7 @@ public:
 	std::vector<attachment> attaches;
 	glm::vec3 Worldnormal;
 	glm::vec3 normal;
+	glm::vec2 textcoord;
 	int index;
 	SkinVertex(float x, float y, float z, int i);
 	void addAttach(int id, float weight);
