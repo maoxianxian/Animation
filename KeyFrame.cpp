@@ -3,8 +3,8 @@
 KeyFrame::KeyFrame(float Time, float val, char* Rulein, char* Ruleout) {
 	this->Time = Time;
 	this->Value = val;
-	this->RuleIn = Rulein;
-	this->RuleOut = Ruleout;
+	this->RuleIn = std::string(Rulein);
+	this->RuleOut = std::string(Ruleout);
 }
 void KeyFrame::precompute(KeyFrame* preframe, KeyFrame* nextframe) {
 	//in tangent
@@ -44,6 +44,19 @@ void KeyFrame::precompute(KeyFrame* preframe, KeyFrame* nextframe) {
 	{
 		TangentOut = std::stof(std::string(RuleOut));
 	}
+	//abcd
+	if (nextframe == NULL) {
+		A = 0;
+		B = 0;
+		C = 0;
+		D = 0;
+	}else{
+		float timelap = nextframe->Time - Time;
+		A = 2 * Value - 2*nextframe->Value + timelap*TangentOut + timelap*nextframe->TangentIn;
+		B = -3 * Value + 3 * nextframe->Value - 2 * timelap*TangentOut - timelap*nextframe->TangentIn;
+		C = timelap*TangentOut;
+		D = Value;
+	}
 }
 
 void KeyFrame::linearcomputetan(KeyFrame* preframe, KeyFrame* nextframe,bool in) {
@@ -53,6 +66,13 @@ void KeyFrame::linearcomputetan(KeyFrame* preframe, KeyFrame* nextframe,bool in)
 		}
 		else {
 			TangentIn = 0;
+		}
+	} else {
+		if (nextframe != NULL) {
+			TangentOut = (nextframe->Value - Value) / (nextframe->Time - Time);
+		}
+		else {
+			TangentOut = 0;
 		}
 	}
 }

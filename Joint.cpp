@@ -88,6 +88,11 @@ void Joint::Load(Tokenizer &scanner, std::vector<Joint*> &joints)
 			DOFs[2]->max = max;
 			//std::cout << "rotx " << " " << min << " " << max << std::endl;
 		}
+		else if(std::string(buffer)!="{")
+		{
+			name = std::string(buffer);
+			//std::cout << name << std::endl;
+		}
 	}
 }
 void Joint::Draw(const glm::mat4 &viewProjMtx, uint shader) {
@@ -116,4 +121,10 @@ void Joint::Update(const glm::mat4 &parentMat)
 void Joint::UpdateDOF(int dof, float amount)
 {
 	DOFs[dof]->setval(DOFs[dof]->val + amount);
+}
+void Joint::UpdateDOF(float x,float y,float z)
+{
+	DOFs[0]->setval(x);
+	DOFs[1]->setval(y);
+	DOFs[2]->setval(z);
 }

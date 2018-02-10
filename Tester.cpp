@@ -97,7 +97,7 @@ void Tester::Update() {
 	Cube->Update();
 	Cam->Update();
 	Skelet->Update();
-
+	anime->Update(Skelet);
 	skin->Update();
 	// Tell glut to re-display the scene
 	glutSetWindow(WindowHandle);

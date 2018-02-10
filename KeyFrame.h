@@ -5,7 +5,7 @@ public:
 	float Time;
 	float Value;
 	float TangentIn, TangentOut;
-	char * RuleIn, *RuleOut;
+	std::string RuleIn, RuleOut;
 
 	float A, B, C, D;
 	KeyFrame(float Time, float val, char *Rulein, char* Ruleout);

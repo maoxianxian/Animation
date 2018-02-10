@@ -1,11 +1,68 @@
 #pragma once
 #include "Core.h"
 #include "Channel.h"
-Channel::Channel() {
-
-}
+Channel::Channel() {}
 float Channel::Evaluate(float time) {
-
+	if (numOfKeys == 0) {
+		return 0;
+	}
+	if (numOfKeys == 1) {
+		return frames[0]->Value;
+	}
+	float tmin = frames[0]->Time;
+	float tmax = frames[numOfKeys-1]->Time;
+	float valbegin = frames[0]->Value;
+	float valend = frames[numOfKeys - 1]->Value;
+	float tanbegin = frames[0]->TangentIn;
+	float tanend = frames[0]->TangentOut;
+	float timelap = tmax - tmin;
+	if (time < tmin) {
+		if (std::string(extrapre) == "constant") {
+			return valbegin;
+		}else if(std::string(extrapre) == "linear"){
+			return (time-tmin)*tanbegin + valbegin;
+		}else if(std::string(extrapre) == "cycle"){
+			return Evaluate(time + timelap);
+		}else if(std::string(extrapre) == "cycle_offset"){
+			return Evaluate(time + timelap)-(valend-valbegin);
+		}else if(std::string(extrapre) == "bounce"){
+			return Evaluate(2 * tmin - time);
+		}
+	} else if(time>tmin){
+		if (std::string(extraafter) == "constant") {
+			return valend;
+		}
+		else if (std::string(extraafter) == "linear") {
+			return (tmax - time)*tanend + valend;
+		}
+		else if (std::string(extraafter) == "cycle") {
+			return Evaluate(time - timelap);
+		}
+		else if (std::string(extraafter) == "cycle_offset") {
+			return Evaluate(time - timelap) + (valend - valbegin);
+		}
+		else if (std::string(extraafter) == "bounce") {
+			return Evaluate(2 * tmax - time);
+		}
+	} else{//within channel span
+		int i = 1;
+		if (time == tmax) {
+			i = numOfKeys - 1;
+			return valend;
+		}
+		else {
+			while (frames[i]->Time < time) {
+				i++;
+			}
+			i--;
+			float A = frames[i]->A;
+			float B = frames[i]->B;
+			float C = frames[i]->C;
+			float D = frames[i]->D;
+			float t = (time - frames[i]->Time)/(frames[i+1]->Time-frames[i]->Time);
+			return A*t*t*t + B*t*t + C*t + D;
+		}
+	}
 }
 void Channel::Load(Tokenizer &scanner) {
 	char buffer[64];
@@ -24,7 +81,7 @@ void Channel::Load(Tokenizer &scanner) {
 		scanner.GetToken(tanin);
 		scanner.GetToken(tanout);
 		KeyFrame * temp = new KeyFrame(tim, val, tanin, tanout);
-		std::cout << tim<<" "<<val<<" "<<std::string(tanin) << " " << std::string(tanout) << std::endl;
+		//std::cout << tim<<" "<<val<<" "<<std::string(tanin) << " " << std::string(tanout) << std::endl;
 		frames.push_back(temp);
 	}
 	std::cout << std::endl;
@@ -32,10 +89,15 @@ void Channel::Load(Tokenizer &scanner) {
 	scanner.GetToken(buffer);//}
 }
 void Channel::precompute() {
-	frames[0]->precompute(nullptr, frames[1]);
-	for (int i = 1; i < frames.size()-1; i++)
-	{
-		frames[i]->precompute(frames[i-1],frames[i+1]);
+	if (numOfKeys == 1) {
+		frames[0]->precompute(nullptr, nullptr);
 	}
-	frames[numOfKeys - 1]->precompute(frames[numOfKeys - 2], NULL);
+	if (numOfKeys > 1) {
+		frames[0]->precompute(nullptr, frames[1]);
+		for (int i = 1; i < frames.size()-1; i++)
+		{
+			frames[i]->precompute(frames[i-1],frames[i+1]);
+		}
+		frames[numOfKeys - 1]->precompute(frames[numOfKeys - 2], NULL);
+	}
 }

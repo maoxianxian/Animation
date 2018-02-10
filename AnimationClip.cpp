@@ -1,9 +1,14 @@
 #include "AnimationClip.h"
 AnimationClip::AnimationClip(const char* filename) {
+	systemtime = glfwGetTime();
 	Load(filename);
+	precompute();
 }
-void AnimationClip::Evaluate(float time) {
-
+void AnimationClip::Evaluate(float time, Skeleton *skel) {
+	skel->root->UpdateDOF(channels[0]->Evaluate(time), channels[1]->Evaluate(time), channels[2]->Evaluate(time));
+	for ( int i = 1; i < numChannels; i++) {
+		skel->joints[i]->UpdateDOF(channels[3 * i]->Evaluate(time), channels[3 * i + 1]->Evaluate(time), channels[3 * i + 2]->Evaluate(time));
+	}
 }
 void AnimationClip::Load(const char *filename) {
 	Tokenizer scanner;
@@ -35,4 +40,8 @@ void AnimationClip::precompute() {
 	{
 		channels[i]->precompute();
 	}
+}
+void AnimationClip::Update(Skeleton *skel) {
+	float currenttime = glfwGetTime();
+	Evaluate(currenttime - systemtime, skel);
 }
