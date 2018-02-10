@@ -9,6 +9,6 @@ public:
 	int numOfKeys;
 	Channel();
 	float Evaluate(float time);
-	bool Load(Tokenizer &scanner);
+	void Load(Tokenizer &scanner);
 	void precompute();
 };

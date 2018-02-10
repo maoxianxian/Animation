@@ -1,8 +1,11 @@
 #include "AnimationClip.h"
+AnimationClip::AnimationClip(const char* filename) {
+	Load(filename);
+}
 void AnimationClip::Evaluate(float time) {
 
 }
-bool AnimationClip::Load(const char *filename) {
+void AnimationClip::Load(const char *filename) {
 	Tokenizer scanner;
 	scanner.Open(filename);
 	char buffer[64];
@@ -17,7 +20,7 @@ bool AnimationClip::Load(const char *filename) {
 	for(int i=0;i<numChannels;i++){
 		char buffer1[64];
 		scanner.GetToken(buffer1);
-		if(std::string(buffer) == "channel") {
+		if(std::string(buffer1) == "channel") {
 			Channel *temp = new Channel();
 			temp->Load(scanner);
 			channels.push_back(temp);
@@ -25,6 +28,7 @@ bool AnimationClip::Load(const char *filename) {
 			std::cout << "error reading the " + std::to_string(i) + "th channel" << std::endl;
 		}
 	}
+	scanner.Close();
 }
 void AnimationClip::precompute() {
 	for (int i = 0; i < channels.size(); i++)

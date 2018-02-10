@@ -9,6 +9,7 @@
 #include "SpinningCube.h"
 #include "Skeleton.h"
 #include "Skin.h"
+#include "AnimationClip.h"
 ////////////////////////////////////////////////////////////////////////////////
 
 // The 'Tester' is a simple top level application class. It creates and manages a
@@ -47,6 +48,7 @@ private:
 	Camera *Cam;
 	Skeleton *Skelet;
 	Skin *skin;
+	AnimationClip* anime;
 	int focusJoint = 0;
 };
 

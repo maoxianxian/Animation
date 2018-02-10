@@ -9,7 +9,9 @@ public:
 	float endtime;
 	int numChannels;
 	std::vector<Channel*> channels;
+	AnimationClip(const char * filename);
 	void Evaluate(float time);
-	bool Load(const char *filename);
+	void Load(const char *filename);
 	void precompute();
-};
+};
+

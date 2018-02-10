@@ -10,7 +10,6 @@ static Tester *TESTER=0;
 
 int main(int argc, char **argv) {
 	glutInit(&argc, argv);
-
 	TESTER=new Tester("Spinning Cube",argc,argv);
 	glutMainLoop();
 	delete TESTER;
@@ -73,6 +72,7 @@ Tester::Tester(const char *windowTitle,int argc,char **argv) {
 	{
 		Skelet = new Skeleton(argv[1]);
 		skin = new Skin(argv[2], Skelet);
+		anime = new AnimationClip(argv[3]);
 	}
 	Cam->SetAspect(float(WinX)/float(WinY));
 }
@@ -80,6 +80,7 @@ Tester::Tester(const char *windowTitle,int argc,char **argv) {
 ////////////////////////////////////////////////////////////////////////////////
 
 Tester::~Tester() {
+	delete anime;
 	delete Program;
 	delete Cube;
 	delete Cam;
@@ -149,7 +150,7 @@ void Tester::Keyboard(int key,int x,int y) {
 		case 0x1b:		// Escape
 			Quit();
 			break;
-		case 'r':
+		/*case 'r':
 			Reset();
 			break;
 		case '=':
@@ -181,7 +182,7 @@ void Tester::Keyboard(int key,int x,int y) {
 			break;
 		case '6':
 			Skelet->UpdateJoint(focusJoint, 2, -0.1);
-			break;
+			break;*/
 	}
 }
 
