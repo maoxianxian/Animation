@@ -3,6 +3,7 @@
 Skeleton::Skeleton(const char * filename)
 {
 	Load(filename);
+	translate = glm::mat4(1.0f);
 }
 
 void Skeleton::Load(const char * filename)
@@ -14,10 +15,12 @@ void Skeleton::Load(const char * filename)
 	if (std::string(buffer) == "balljoint")
 	{
 		Joint * temp = new Joint();
+		temp->name = "root";
 		joints.push_back(temp);
 		temp->Load(scanner, joints);
 		root = temp;
 	}
+	//std::cout << joints.size() << std::endl;
 	scanner.Close();
 }
 
@@ -27,13 +30,18 @@ void Skeleton::Draw(const glm::mat4 &viewProjMtx, uint shader) {
 
 void Skeleton::Update()
 {
-	root->Update(glm::mat4(1.0f));
+	root->Update(translate);
 }
 
 glm::mat4 Skeleton::GetWorldMatrix(int i) {
 	return joints[i]->WorldMtx;
 }
 
-void Skeleton::UpdateJoint(int index, int dof, float amount) {
+std::string Skeleton::UpdateJoint(int index, int dof, float amount) {
 	joints[index]->UpdateDOF(dof, amount);
+	return joints[index]->name;
+}
+
+void Skeleton::setTranslate(float x, float y, float z) {
+	translate = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z));
 }

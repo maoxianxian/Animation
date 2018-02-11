@@ -150,7 +150,7 @@ void Tester::Keyboard(int key,int x,int y) {
 		case 0x1b:		// Escape
 			Quit();
 			break;
-		/*case 'r':
+		case 'r':
 			Reset();
 			break;
 		case '=':
@@ -182,7 +182,7 @@ void Tester::Keyboard(int key,int x,int y) {
 			break;
 		case '6':
 			Skelet->UpdateJoint(focusJoint, 2, -0.1);
-			break;*/
+			break;
 	}
 }
 

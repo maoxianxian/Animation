@@ -124,7 +124,13 @@ void Joint::UpdateDOF(int dof, float amount)
 }
 void Joint::UpdateDOF(float x,float y,float z)
 {
+	//std::cout << DOFs.size() << std::endl;
 	DOFs[0]->setval(x);
+	//std::cout << 123456 << std::endl;
+
 	DOFs[1]->setval(y);
+
 	DOFs[2]->setval(z);
+	//std::cout <<123456 << std::endl;
+
 }

@@ -1,13 +1,17 @@
 #include "AnimationClip.h"
 AnimationClip::AnimationClip(const char* filename) {
-	systemtime = glfwGetTime();
+	
+	systemtime = ((float)glutGet(GLUT_ELAPSED_TIME))/1000.f;
 	Load(filename);
 	precompute();
 }
 void AnimationClip::Evaluate(float time, Skeleton *skel) {
-	skel->root->UpdateDOF(channels[0]->Evaluate(time), channels[1]->Evaluate(time), channels[2]->Evaluate(time));
-	for ( int i = 1; i < numChannels; i++) {
-		skel->joints[i]->UpdateDOF(channels[3 * i]->Evaluate(time), channels[3 * i + 1]->Evaluate(time), channels[3 * i + 2]->Evaluate(time));
+	skel->setTranslate(channels[0]->Evaluate(time), channels[1]->Evaluate(time), channels[2]->Evaluate(time));
+	for ( int i = 1; i < numChannels/3; i++) {
+		float x = channels[3 * i]->Evaluate(time);
+		float y = channels[3 * i + 1]->Evaluate(time);
+		float z = channels[3 * i + 2]->Evaluate(time);
+		skel->joints[i-1]->UpdateDOF(x, y, z);
 	}
 }
 void AnimationClip::Load(const char *filename) {
@@ -42,6 +46,7 @@ void AnimationClip::precompute() {
 	}
 }
 void AnimationClip::Update(Skeleton *skel) {
-	float currenttime = glfwGetTime();
+	float currenttime = ((float)glutGet(GLUT_ELAPSED_TIME)) / 1000.f;
+	//std::cout << currenttime - systemtime << std::endl;
 	Evaluate(currenttime - systemtime, skel);
 }

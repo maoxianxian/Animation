@@ -14,7 +14,7 @@ float Channel::Evaluate(float time) {
 	float valbegin = frames[0]->Value;
 	float valend = frames[numOfKeys - 1]->Value;
 	float tanbegin = frames[0]->TangentIn;
-	float tanend = frames[0]->TangentOut;
+	float tanend = frames[numOfKeys - 1]->TangentOut;
 	float timelap = tmax - tmin;
 	if (time < tmin) {
 		if (std::string(extrapre) == "constant") {
@@ -28,7 +28,7 @@ float Channel::Evaluate(float time) {
 		}else if(std::string(extrapre) == "bounce"){
 			return Evaluate(2 * tmin - time);
 		}
-	} else if(time>tmin){
+	} else if(time>tmax){
 		if (std::string(extraafter) == "constant") {
 			return valend;
 		}
@@ -60,7 +60,9 @@ float Channel::Evaluate(float time) {
 			float C = frames[i]->C;
 			float D = frames[i]->D;
 			float t = (time - frames[i]->Time)/(frames[i+1]->Time-frames[i]->Time);
-			return A*t*t*t + B*t*t + C*t + D;
+			float result= A*t*t*t + B*t*t + C*t + D;
+			//std::cout << result << std::endl;
+			return result;
 		}
 	}
 }
@@ -84,7 +86,6 @@ void Channel::Load(Tokenizer &scanner) {
 		//std::cout << tim<<" "<<val<<" "<<std::string(tanin) << " " << std::string(tanout) << std::endl;
 		frames.push_back(temp);
 	}
-	std::cout << std::endl;
 	scanner.GetToken(buffer);//}
 	scanner.GetToken(buffer);//}
 }
