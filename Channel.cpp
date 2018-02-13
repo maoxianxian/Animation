@@ -28,6 +28,7 @@ float Channel::Evaluate(float time) {
 		}else if(std::string(extrapre) == "bounce"){
 			return Evaluate(2 * tmin - time);
 		}
+		return 0;
 	} else if(time>tmax){
 		if (std::string(extraafter) == "constant") {
 			return valend;
@@ -44,6 +45,7 @@ float Channel::Evaluate(float time) {
 		else if (std::string(extraafter) == "bounce") {
 			return Evaluate(2 * tmax - time);
 		}
+		return 0;
 	} else{//within channel span
 		int i = 1;
 		if (time == tmax) {
@@ -83,7 +85,6 @@ void Channel::Load(Tokenizer &scanner) {
 		scanner.GetToken(tanin);
 		scanner.GetToken(tanout);
 		KeyFrame * temp = new KeyFrame(tim, val, tanin, tanout);
-		//std::cout << tim<<" "<<val<<" "<<std::string(tanin) << " " << std::string(tanout) << std::endl;
 		frames.push_back(temp);
 	}
 	scanner.GetToken(buffer);//}
