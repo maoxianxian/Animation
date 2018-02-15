@@ -97,18 +97,19 @@ void Channel::precompute() {
 		frames[0]->precomputeconsts(nullptr, nullptr);
 	}
 	if (numOfKeys > 1) {
+		//compute tangents
 		frames[0]->precomputetan(nullptr, frames[1]);
 		for (int i = 1; i < frames.size()-1; i++)
 		{
 			frames[i]->precomputetan(frames[i-1],frames[i+1]);
 		}
-		frames[numOfKeys - 1]->precomputetan(frames[numOfKeys - 2], NULL);
-
+		frames[numOfKeys - 1]->precomputetan(frames[numOfKeys - 2], nullptr);
+		//compute constants
 		frames[0]->precomputeconsts(nullptr, frames[1]);
 		for (int i = 1; i < frames.size() - 1; i++)
 		{
 			frames[i]->precomputeconsts(frames[i - 1], frames[i + 1]);
 		}
-		frames[numOfKeys - 1]->precomputeconsts(frames[numOfKeys - 2], NULL);
+		frames[numOfKeys - 1]->precomputeconsts(frames[numOfKeys - 2], nullptr);
 	}
 }
