@@ -85,6 +85,7 @@ void Channel::Load(Tokenizer &scanner) {
 		scanner.GetToken(tanin);
 		scanner.GetToken(tanout);
 		KeyFrame * temp = new KeyFrame(tim, val, tanin, tanout);
+		//std::cout << tim << " " << val << " " << std::string(tanin) << " " << std::string(tanout) << std::endl;
 		frames.push_back(temp);
 	}
 	scanner.GetToken(buffer);//}
@@ -92,14 +93,22 @@ void Channel::Load(Tokenizer &scanner) {
 }
 void Channel::precompute() {
 	if (numOfKeys == 1) {
-		frames[0]->precompute(nullptr, nullptr);
+		frames[0]->precomputetan(nullptr, nullptr);
+		frames[0]->precomputeconsts(nullptr, nullptr);
 	}
 	if (numOfKeys > 1) {
-		frames[0]->precompute(nullptr, frames[1]);
+		frames[0]->precomputetan(nullptr, frames[1]);
 		for (int i = 1; i < frames.size()-1; i++)
 		{
-			frames[i]->precompute(frames[i-1],frames[i+1]);
+			frames[i]->precomputetan(frames[i-1],frames[i+1]);
 		}
-		frames[numOfKeys - 1]->precompute(frames[numOfKeys - 2], NULL);
+		frames[numOfKeys - 1]->precomputetan(frames[numOfKeys - 2], NULL);
+
+		frames[0]->precomputeconsts(nullptr, frames[1]);
+		for (int i = 1; i < frames.size() - 1; i++)
+		{
+			frames[i]->precomputeconsts(frames[i - 1], frames[i + 1]);
+		}
+		frames[numOfKeys - 1]->precomputeconsts(frames[numOfKeys - 2], NULL);
 	}
 }

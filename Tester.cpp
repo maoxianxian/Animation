@@ -102,6 +102,12 @@ void Tester::Update() {
 	// Tell glut to re-display the scene
 	glutSetWindow(WindowHandle);
 	glutPostRedisplay();
+	/*const GLenum err = glGetError();
+	if (err != GL_NO_ERROR)
+	{
+		const char* str = (const char*)gluErrorString(err);
+		std::cerr << "OpenGL error : " <<  ", " << str << std::endl;
+	}*/
 }
 
 ////////////////////////////////////////////////////////////////////////////////

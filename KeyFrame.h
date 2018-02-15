@@ -9,7 +9,8 @@ public:
 
 	float A, B, C, D;
 	KeyFrame(float Time, float val, char *Rulein, char* Ruleout);
-	void precompute(KeyFrame* preframe,KeyFrame* nextframe);
+	void precomputetan(KeyFrame* preframe,KeyFrame* nextframe);
+	void precomputeconsts(KeyFrame* preframe, KeyFrame* nextframe);
 	void linearcomputetan(KeyFrame* preframe, KeyFrame* nextframe,bool in);
 };
 

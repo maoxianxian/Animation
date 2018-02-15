@@ -1,13 +1,14 @@
 #include "AnimationClip.h"
 AnimationClip::AnimationClip(const char* filename) {
 	
-	systemtime = ((float)glutGet(GLUT_ELAPSED_TIME))/1000.f;
+	systemtime = ((float)glutGet(GLUT_ELAPSED_TIME))/2000.f;
 	Load(filename);
 	precompute();
 }
 void AnimationClip::Evaluate(float time, Skeleton *skel) {
 	skel->setTranslate(channels[0]->Evaluate(time), channels[1]->Evaluate(time), channels[2]->Evaluate(time));
 	for ( int i = 1; i < numChannels/3; i++) {
+		
 		float x = channels[3 * i]->Evaluate(time);
 		float y = channels[3 * i + 1]->Evaluate(time);
 		float z = channels[3 * i + 2]->Evaluate(time);
@@ -44,9 +45,11 @@ void AnimationClip::precompute() {
 	{
 		channels[i]->precompute();
 	}
+	/*for (int i = 0; i < 5; i++) {
+		std::cout << channels[6]->frames[i]->TangentIn << " " << channels[7]->frames[i]->TangentOut << std::endl;;
+	}*/
 }
 void AnimationClip::Update(Skeleton *skel) {
-	float currenttime = ((float)glutGet(GLUT_ELAPSED_TIME)) / 1000.f;
-	//std::cout << currenttime - systemtime << std::endl;
+	float currenttime = ((float)glutGet(GLUT_ELAPSED_TIME)) / 2000.f;
 	Evaluate(currenttime - systemtime, skel);
 }
