@@ -241,6 +241,7 @@ void Skin::Draw(const glm::mat4 &viewProjMtx, uint shader)
 	}
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	glUseProgram(0);
 }
