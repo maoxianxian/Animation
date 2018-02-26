@@ -61,7 +61,8 @@ Tester::Tester(const char *windowTitle,int argc,char **argv) {
 	glEnable(GL_CULL_FACE);
 
 	// Initialize components
-	Program=new ShaderProgram("../Model.glsl",ShaderProgram::eRender);
+	Program = new ShaderProgram("../Model.glsl", ShaderProgram::eRender);
+	clothProgram = new ShaderProgram("../cloth.glsl", ShaderProgram::eRender);
 	Cube=new SpinningCube;
 	Cam=new Camera;
 	if (argc == 1) {
@@ -74,6 +75,7 @@ Tester::Tester(const char *windowTitle,int argc,char **argv) {
 		skin = new Skin(argv[2], Skelet);
 		anime = new AnimationClip(argv[3]);
 	}
+	cloth = new Cloth(2, 2);
 	Cam->SetAspect(float(WinX)/float(WinY));
 }
 
@@ -126,9 +128,8 @@ void Tester::Draw() {
 	glViewport(0, 0, WinX, WinY);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//Skelet->Draw(Cam->GetViewProjectMtx(), Program->GetProgramID());
-	// Draw components
-	skin->Draw(Cam->GetViewProjectMtx(), Program->GetProgramID());
-	// Finish drawing scene
+	//skin->Draw(Cam->GetViewProjectMtx(), Program->GetProgramID());
+	cloth->Draw(Cam->GetViewProjectMtx(), clothProgram->GetProgramID());
 	glFinish();
 	glutSwapBuffers();
 }

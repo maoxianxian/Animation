@@ -7,7 +7,7 @@ public:
 	float DamperConst;
 	Particle *p1,*p2;
 	float restLength;
-	SpringDamper();
+	SpringDamper(Particle* p1, Particle* p2, float length, float SpringConst, float DamperConst);
 	~SpringDamper();
 	void ComputerForces();
 };

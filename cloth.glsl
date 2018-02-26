@@ -51,7 +51,7 @@ out vec3 finalColor;
 
 void main() {
 	// Compute irradiance (sum of ambient & direct lighting)
-	vec3 AmbientColor=vec3(0.5);
+	vec3 AmbientColor=vec3(0.9f,0.1f,0.1f);
 	if(texturee==1)
 	{
 		AmbientColor=texture(myTexture, textcoord).rgb;

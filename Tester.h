@@ -10,6 +10,7 @@
 #include "Skeleton.h"
 #include "Skin.h"
 #include "AnimationClip.h"
+#include "Cloth.h"
 ////////////////////////////////////////////////////////////////////////////////
 
 // The 'Tester' is a simple top level application class. It creates and manages a
@@ -44,11 +45,13 @@ private:
 
 	// Components
 	ShaderProgram *Program;
+	ShaderProgram *clothProgram;
 	SpinningCube *Cube;
 	Camera *Cam;
 	Skeleton *Skelet;
 	Skin *skin;
 	AnimationClip* anime;
+	Cloth* cloth;
 	int focusJoint = 0;
 };
 

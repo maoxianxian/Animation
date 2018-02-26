@@ -30,5 +30,13 @@ Triangle::~Triangle() {
 void Triangle::Draw() {
 	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexBuffer);
+	uint posLoc = 0;
+	glEnableVertexAttribArray(posLoc);
+	glVertexAttribPointer(posLoc, 3, GL_FLOAT, GL_FALSE, sizeof(ModelVertex), 0);
+	uint normLoc = 1;
+	glEnableVertexAttribArray(normLoc);
+	glVertexAttribPointer(normLoc, 3, GL_FLOAT, GL_FALSE, sizeof(ModelVertex), (void*)12);
 	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
