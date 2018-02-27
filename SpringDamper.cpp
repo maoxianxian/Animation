@@ -6,9 +6,19 @@ SpringDamper::SpringDamper(Particle* p1, Particle* p2, float length, float Sprin
 	this->SpringConst = SpringConst;
 	this->DamperConst = DamperConst;
 }
+
 SpringDamper::~SpringDamper() {
-
 }
-void SpringDamper::ComputerForces() {
 
+void SpringDamper::ComputerForces() {
+	//spring force
+	glm::vec3 e = glm::normalize(p1->position - p2->position);
+	float x=glm::length((p1->position - p2->position)) - this->restLength;
+	p1->ApplyForce(-SpringConst*x*e);
+	p2->ApplyForce(SpringConst*x*e);
+
+	//damper force
+	float v=glm::dot(e, p1->velocity) - glm::dot(e,p2->velocity);
+	p1->ApplyForce(-DamperConst*v*e);
+	p2->ApplyForce(DamperConst*v*e);
 }

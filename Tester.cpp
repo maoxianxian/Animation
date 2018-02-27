@@ -75,7 +75,7 @@ Tester::Tester(const char *windowTitle,int argc,char **argv) {
 		skin = new Skin(argv[2], Skelet);
 		anime = new AnimationClip(argv[3]);
 	}
-	cloth = new Cloth(2, 2);
+	cloth = new Cloth(2, 2, 1, 0.5f, 0.2f);
 	Cam->SetAspect(float(WinX)/float(WinY));
 }
 
@@ -101,6 +101,7 @@ void Tester::Update() {
 	Skelet->Update();
 	anime->Update(Skelet);
 	skin->Update();
+	cloth->Update();
 	// Tell glut to re-display the scene
 	glutSetWindow(WindowHandle);
 	glutPostRedisplay();

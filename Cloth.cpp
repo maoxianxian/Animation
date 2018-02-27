@@ -1,16 +1,17 @@
 #include "Cloth.h"
 
-Cloth::Cloth(int height,int width) {
+Cloth::Cloth(int height,int width, float blocksize,float Springconst, float Damperconst) {
 	prevtime = ((float)glutGet(GLUT_ELAPSED_TIME)) / 1000.f;
 	this->height = height;
 	this->width = width;
 	modelmat = glm::mat4(1.0f);
 	for(int i = 0; i < height; i++) {
 		for (int j = 0; j < width; j++) {
-			Particle* temp = new Particle(glm::vec3(i,j,0),1);
+			Particle* temp = new Particle(glm::vec3(i*blocksize,j*blocksize,0),1);
 			particles.push_back(temp);
 		}
 	}
+
 	for (int i = 0; i < height - 1; i++) {
 		for (int j = 0; j < width - 1; j++) {
 			int upperleft = i*width + j;
@@ -21,22 +22,22 @@ Cloth::Cloth(int height,int width) {
 			triangles.push_back(temp);
 			temp = new Triangle(particles[bottomright], particles[upperright], particles[bottomleft]);
 			triangles.push_back(temp);
-			SpringDamper* spr = new SpringDamper(particles[upperleft], particles[bottomright], sqrt(2), 0.1f, 0.1f);
+			SpringDamper* spr = new SpringDamper(particles[upperleft], particles[bottomright], (float)sqrt(2)*blocksize, Springconst, Damperconst);
 			springs.push_back(spr);
-			spr = new SpringDamper(particles[bottomleft], particles[upperright], sqrt(2), 0.1f, 0.1f);
+			spr = new SpringDamper(particles[bottomleft], particles[upperright], (float)sqrt(2)*blocksize, Springconst, Damperconst);
 			springs.push_back(spr);
-			spr = new SpringDamper(particles[bottomright], particles[upperright], 1, 0.1f, 0.1f);
+			spr = new SpringDamper(particles[bottomright], particles[upperright], blocksize, Springconst, Damperconst);
 			springs.push_back(spr);
-			spr = new SpringDamper(particles[bottomright], particles[bottomleft], 1, 0.1f, 0.1f);
+			spr = new SpringDamper(particles[bottomright], particles[bottomleft], blocksize, Springconst, Damperconst);
 			springs.push_back(spr);
 		}
 	}
 	for (int i = 0; i < height - 1; i++) {
-		SpringDamper* spr = new SpringDamper(particles[i*width], particles[(i+1)*width], 1, 0.1f, 0.1f);
+		SpringDamper* spr = new SpringDamper(particles[i*width], particles[(i+1)*width], blocksize, Springconst, Damperconst);
 		springs.push_back(spr);
 	}
 	for (int j = 0; j < width - 1; j++) {
-		SpringDamper* spr = new SpringDamper(particles[j], particles[(j + 1)], 1, 0.1f, 0.1f);
+		SpringDamper* spr = new SpringDamper(particles[j], particles[(j + 1)], blocksize, Springconst, Damperconst);
 		springs.push_back(spr);
 	}
 }
@@ -62,6 +63,12 @@ void Cloth::Update() {
 	float currtime = ((float)glutGet(GLUT_ELAPSED_TIME)) / 1000.f;
 	float timediff = currtime-prevtime;
 	prevtime = currtime;
+	for (int i = 0; i < particles.size(); i++) {
+		particles[i]->ApplyForce(9.8f*particles[i]->mass*glm::vec3(0,-1,0));
+	}
+	for (int i = 0; i < triangles.size(); i++) {
+		triangles[i]->Update();
+	}
 	for (int i = 0; i < springs.size(); i++) {
 		springs[i]->ComputerForces();
 	}
