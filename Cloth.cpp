@@ -6,8 +6,12 @@ Cloth::Cloth(int height,int width, float blocksize,float Springconst, float Damp
 	this->width = width;
 	modelmat = glm::mat4(1.0f);
 	for(int i = 0; i < height; i++) {
+		bool stationary = false;
+		if (i == 0) {
+			stationary = true;
+		}
 		for (int j = 0; j < width; j++) {
-			Particle* temp = new Particle(glm::vec3(i*blocksize,j*blocksize,0),1);
+			Particle* temp = new Particle(glm::vec3(j*blocksize, -i*blocksize, 0), 0.01f, stationary);
 			particles.push_back(temp);
 		}
 	}
@@ -18,9 +22,10 @@ Cloth::Cloth(int height,int width, float blocksize,float Springconst, float Damp
 			int upperright = upperleft + 1;
 			int bottomleft = upperleft + width;
 			int bottomright = bottomleft + 1;
-			Triangle* temp = new Triangle(particles[upperleft], particles[bottomleft], particles[upperright]);
+			//std::cout << upperleft << " " << upperright << " " << bottomleft << " " << bottomright << std::endl;
+			Triangle* temp = new Triangle(particles[upperleft], particles[bottomleft],  particles[upperright]);
 			triangles.push_back(temp);
-			temp = new Triangle(particles[bottomright], particles[upperright], particles[bottomleft]);
+			temp = new Triangle(particles[bottomright], particles[upperright],  particles[bottomleft]);
 			triangles.push_back(temp);
 			SpringDamper* spr = new SpringDamper(particles[upperleft], particles[bottomright], (float)sqrt(2)*blocksize, Springconst, Damperconst);
 			springs.push_back(spr);

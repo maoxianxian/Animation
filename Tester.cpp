@@ -75,7 +75,7 @@ Tester::Tester(const char *windowTitle,int argc,char **argv) {
 		skin = new Skin(argv[2], Skelet);
 		anime = new AnimationClip(argv[3]);
 	}
-	cloth = new Cloth(2, 2, 1, 0.5f, 0.2f);
+	cloth = new Cloth(2, 2, 1, 0.4f, 0.0f);
 	Cam->SetAspect(float(WinX)/float(WinY));
 }
 
