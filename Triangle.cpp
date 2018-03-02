@@ -34,8 +34,9 @@ void Triangle::Draw() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void Triangle::Update() {
+void Triangle::Update(glm::vec3 windDir) {
 	UpdateVTX();
+	ComputeAeroForce(windDir);
 }
 
 void Triangle::UpdateVTX() {
@@ -45,7 +46,20 @@ void Triangle::UpdateVTX() {
 	vtx.push_back({ p1->position,normal });
 	vtx.push_back({ p2->position,normal });
 	vtx.push_back({ p3->position,normal });
+	//std::cout << p1->position.x << " " << p1->position.y << " " << p1->position.z << std::endl;
 	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, vtx.size() * sizeof(ModelVertex), &vtx[0], GL_STATIC_DRAW);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void Triangle::ComputeAeroForce(glm::vec3 airV) {
+	glm::vec3 v = (p1->velocity + p2->velocity + p3->velocity) / 3.0f;
+	v = v - airV;
+	float area=0.5f*glm::length(glm::cross(p1->position - p2->position, p1->position - p3->position));
+	area = area*glm::dot(v, normal) / glm::length(v);
+	float pc = 1;
+	glm::vec3 force = -0.5f*pc*glm::length(v)*glm::length(v)*area*normal;
+	p1->ApplyForce(force / 3.0f);
+	p2->ApplyForce(force / 3.0f);
+	p3->ApplyForce(force / 3.0f);
 }

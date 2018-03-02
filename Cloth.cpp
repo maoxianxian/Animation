@@ -1,6 +1,6 @@
 #include "Cloth.h"
 
-Cloth::Cloth(int height,int width, float blocksize,float Springconst, float Damperconst) {
+Cloth::Cloth(int height,int width, float blocksize,float Springconst, float Damperconst, glm::vec3 ori) {
 	prevtime = ((float)glutGet(GLUT_ELAPSED_TIME)) / 1000.f;
 	this->height = height;
 	this->width = width;
@@ -11,7 +11,7 @@ Cloth::Cloth(int height,int width, float blocksize,float Springconst, float Damp
 			stationary = true;
 		}
 		for (int j = 0; j < width; j++) {
-			Particle* temp = new Particle(glm::vec3(j*blocksize, -i*blocksize, 0), 0.01f, stationary);
+			Particle* temp = new Particle(ori+glm::vec3(j*blocksize, -i*blocksize, 0), 0.01f, stationary);
 			particles.push_back(temp);
 		}
 	}
@@ -64,15 +64,15 @@ void Cloth::Draw(const glm::mat4 &viewProjMtx, uint shader) {
 	glUseProgram(0);
 }
 
-void Cloth::Update() {
-	float currtime = ((float)glutGet(GLUT_ELAPSED_TIME)) / 1000.f;
+void Cloth::Update(glm::vec3 windDir) {
+	float currtime = ((float)glutGet(GLUT_ELAPSED_TIME)) / 2000.f;
 	float timediff = currtime-prevtime;
 	prevtime = currtime;
 	for (int i = 0; i < particles.size(); i++) {
 		particles[i]->ApplyForce(9.8f*particles[i]->mass*glm::vec3(0,-1,0));
 	}
 	for (int i = 0; i < triangles.size(); i++) {
-		triangles[i]->Update();
+		triangles[i]->Update(windDir);
 	}
 	for (int i = 0; i < springs.size(); i++) {
 		springs[i]->ComputerForces();

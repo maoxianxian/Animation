@@ -13,6 +13,7 @@ public:
 	Triangle(Particle *p1, Particle *p2, Particle *p3);
 	~Triangle();
 	void Draw();
-	void Update();
+	void Update(glm::vec3 windDir);
 	void UpdateVTX();
+	void ComputeAeroForce(glm::vec3 airV);
 };

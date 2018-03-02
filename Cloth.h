@@ -12,8 +12,8 @@ public:
 	std::vector<Triangle*> triangles;
 	std::vector<SpringDamper*> springs;
 	std::vector<Particle*> particles;
-	Cloth(int height, int width, float blocksize, float Springconst, float Damperconst);
+	Cloth(int height, int width, float blocksize, float Springconst, float Damperconst, glm::vec3 ori);
 	~Cloth();
 	void Draw(const glm::mat4 &viewProjMtx, uint shader);
-	void Update();
+	void Update(glm::vec3 windDir);
 };

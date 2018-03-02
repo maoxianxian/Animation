@@ -44,6 +44,7 @@ private:
 	int MouseX,MouseY;
 
 	// Components
+	glm::vec3 windDir = glm::vec3(0, 0, -3);
 	ShaderProgram *Program;
 	ShaderProgram *clothProgram;
 	SpinningCube *Cube;
