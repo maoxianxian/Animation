@@ -16,4 +16,6 @@ public:
 	~Cloth();
 	void Draw(const glm::mat4 &viewProjMtx, uint shader);
 	void Update(glm::vec3 windDir);
+	void computeNormals();
+	void updateChildren(glm::vec3 windDir, float timediff);
 };

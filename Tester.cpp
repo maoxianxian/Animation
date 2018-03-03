@@ -105,12 +105,12 @@ void Tester::Update() {
 	// Tell glut to re-display the scene
 	glutSetWindow(WindowHandle);
 	glutPostRedisplay();
-	/*const GLenum err = glGetError();
+	const GLenum err = glGetError();
 	if (err != GL_NO_ERROR)
 	{
 		const char* str = (const char*)gluErrorString(err);
 		std::cerr << "OpenGL error : " <<  ", " << str << std::endl;
-	}*/
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -161,7 +161,7 @@ void Tester::Keyboard(int key,int x,int y) {
 		case 'r':
 			Reset();
 			break;
-		case '=':
+		/*case '=':
 			if (focusJoint < Skelet->joints.size()-1)
 			{
 				focusJoint++;
@@ -190,7 +190,48 @@ void Tester::Keyboard(int key,int x,int y) {
 			break;
 		case '6':
 			Skelet->UpdateJoint(focusJoint, 2, -0.1);
+			break;*/
+		case '=':
+			if (state<2)
+			{
+				state++;
+			}
 			break;
+		case '-':
+			if (state > 0)
+			{
+				state--;
+			}
+			break;
+		case '1':
+			currvec += glm::vec3(0.1f, 0, 0);
+			break;
+		case '2':
+			currvec += glm::vec3(-0.1f, 0, 0);
+			break;
+		case '3':
+			currvec += glm::vec3(0, 0.1f, 0);
+			break;
+		case '4':
+			currvec += glm::vec3(0, -0.1f, 0);
+			break;
+		case '5':
+			currvec += glm::vec3(0, 0, 0.1f);
+			break;
+		case '6':
+			currvec += glm::vec3(0, 0, -0.1f);
+			break;
+
+		}
+	if (state == 0) {
+		windDir = currvec;
+		std::cout << "wind direction: " << windDir.x << " " << windDir.y << " " << windDir.z << std::endl;
+	}
+	if (state == 1) {
+
+	}
+	if (state == 2) {
+
 	}
 }
 

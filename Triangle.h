@@ -16,4 +16,5 @@ public:
 	void Update(glm::vec3 windDir);
 	void UpdateVTX();
 	void ComputeAeroForce(glm::vec3 airV);
+	void computeNormal();
 };

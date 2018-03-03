@@ -68,9 +68,26 @@ void Cloth::Update(glm::vec3 windDir) {
 	float currtime = ((float)glutGet(GLUT_ELAPSED_TIME)) / 2000.f;
 	float timediff = currtime-prevtime;
 	prevtime = currtime;
+	computeNormals();
 	for (int i = 0; i < particles.size(); i++) {
 		particles[i]->ApplyForce(9.8f*particles[i]->mass*glm::vec3(0,-1,0));
 	}
+	updateChildren(windDir, timediff);
+}
+
+void Cloth::computeNormals() {
+	for (int i = 0; i < particles.size(); i++) {
+		particles[i]->normal = glm::vec3(0.0f);
+	}
+	for (int i = 0; i < triangles.size(); i++) {
+		triangles[i]->computeNormal();
+	}
+	for (int i = 0; i < particles.size(); i++) {
+		particles[i]->normal = glm::normalize(particles[i]->normal);
+	}
+}
+
+void Cloth::updateChildren(glm::vec3 windDir, float timediff) {
 	for (int i = 0; i < triangles.size(); i++) {
 		triangles[i]->Update(windDir);
 	}

@@ -41,11 +41,9 @@ void Triangle::Update(glm::vec3 windDir) {
 
 void Triangle::UpdateVTX() {
 	vtx.clear();
-	normal = glm::cross(p1->position - p2->position, p1->position - p3->position);
-	normal = glm::normalize(normal);
-	vtx.push_back({ p1->position,normal });
-	vtx.push_back({ p2->position,normal });
-	vtx.push_back({ p3->position,normal });
+	vtx.push_back({ p1->position,p1->normal });
+	vtx.push_back({ p2->position,p2->normal });
+	vtx.push_back({ p3->position,p3->normal });
 	//std::cout << p1->position.x << " " << p1->position.y << " " << p1->position.z << std::endl;
 	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
 	glBufferData(GL_ARRAY_BUFFER, vtx.size() * sizeof(ModelVertex), &vtx[0], GL_STATIC_DRAW);
@@ -62,4 +60,12 @@ void Triangle::ComputeAeroForce(glm::vec3 airV) {
 	p1->ApplyForce(force / 3.0f);
 	p2->ApplyForce(force / 3.0f);
 	p3->ApplyForce(force / 3.0f);
+}
+
+void Triangle::computeNormal() {
+	normal = glm::cross(p1->position - p2->position, p1->position - p3->position);
+	normal = glm::normalize(normal);
+	p1->normal += normal;
+	p2->normal += normal;
+	p3->normal += normal;
 }

@@ -45,6 +45,8 @@ private:
 
 	// Components
 	glm::vec3 windDir = glm::vec3(0, 0, -3);
+	glm::vec3 currvec=windDir;
+	int state = 0;//wind
 	ShaderProgram *Program;
 	ShaderProgram *clothProgram;
 	SpinningCube *Cube;
