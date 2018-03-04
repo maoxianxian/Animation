@@ -6,6 +6,9 @@ Triangle::Triangle(Particle *p1, Particle *p2, Particle *p3) {
 	idx.push_back(0);
 	idx.push_back(1);
 	idx.push_back(2);
+	idx.push_back(0);
+	idx.push_back(2);
+	idx.push_back(1);
 	glGenBuffers(1, &VertexBuffer);
 	glGenBuffers(1, &IndexBuffer);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IndexBuffer);
@@ -29,7 +32,7 @@ void Triangle::Draw() {
 	uint normLoc = 1;
 	glEnableVertexAttribArray(normLoc);
 	glVertexAttribPointer(normLoc, 3, GL_FLOAT, GL_FALSE, sizeof(ModelVertex), (void*)12);
-	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, idx.size(), GL_UNSIGNED_INT, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
@@ -57,7 +60,6 @@ void Triangle::ComputeAeroForce(glm::vec3 airV) {
 	area = area*glm::dot(v, normal) / glm::length(v);
 	float pc = 1;
 	glm::vec3 force = -0.5f*pc*glm::length(v)*glm::length(v)*area*normal;
-	//std::cout << glm::length(airV) << std::endl;
 	p1->ApplyForce(force / 3.0f);
 	p2->ApplyForce(force / 3.0f);
 	p3->ApplyForce(force / 3.0f);
