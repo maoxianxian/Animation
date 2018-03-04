@@ -3,7 +3,7 @@
 ////////////////////////////////////////
 
 #include "Tester.h"
-
+#include <sstream>
 ////////////////////////////////////////////////////////////////////////////////
 
 static Tester *TESTER=0;
@@ -65,7 +65,7 @@ Tester::Tester(const char *windowTitle,int argc,char **argv) {
 	clothProgram = new ShaderProgram("../cloth.glsl", ShaderProgram::eRender);
 	Cube=new SpinningCube;
 	Cam=new Camera;
-	if (argc == 1) {
+	/*if (argc == 1) {
 		Skelet = new Skeleton("../wasp.skel.txt");
 		skin = new Skin("../wasp.skin.txt", Skelet);
 	}
@@ -74,7 +74,8 @@ Tester::Tester(const char *windowTitle,int argc,char **argv) {
 		Skelet = new Skeleton(argv[1]);
 		skin = new Skin(argv[2], Skelet);
 		anime = new AnimationClip(argv[3]);
-	}
+	}*/
+	Skelet = new Skeleton("../house.skel.txt");
 	cloth = new Cloth(16, 64, 0.1f, 0.9f, 0.1f,glm::vec3(-3,2,0));//make sure damper const is not too big
 	Cam->SetAspect(float(WinX)/float(WinY));
 }
@@ -99,8 +100,8 @@ void Tester::Update() {
 	Cube->Update();
 	Cam->Update();
 	Skelet->Update();
-	anime->Update(Skelet);
-	skin->Update();
+	//anime->Update(Skelet);
+	//skin->Update();
 	cloth->Update(windDir);
 	// Tell glut to re-display the scene
 	glutSetWindow(WindowHandle);
@@ -128,9 +129,9 @@ void Tester::Draw() {
 	// Begin drawing scene
 	glViewport(0, 0, WinX, WinY);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//Skelet->Draw(Cam->GetViewProjectMtx(), Program->GetProgramID());
+	Skelet->Draw(Cam->GetViewProjectMtx(), Program->GetProgramID());
 	//skin->Draw(Cam->GetViewProjectMtx(), Program->GetProgramID());
-	cloth->Draw(Cam->GetViewProjectMtx(), clothProgram->GetProgramID());
+	//cloth->Draw(Cam->GetViewProjectMtx(), clothProgram->GetProgramID());
 	glFinish();
 	glutSwapBuffers();
 }
@@ -233,7 +234,19 @@ void Tester::Keyboard(int key,int x,int y) {
 		case '6':
 			handleKeyboard(glm::vec3(0, 0, -0.1f));
 			break;
-
+		case 'i':
+			int index;
+			float x, y, z;
+			std::string line;
+			if (std::getline(std::cin, line)) {
+				std::istringstream iss(line);
+				iss >> index;
+				iss >> x;
+				iss >> y;
+				iss >> z;
+				//std::cout << index<<" "<<x<<" "<<y<<" "<<z << std::endl;
+				//std::cout << line << std::endl;
+			}
 		}
 	if (state == 0) {
 		std::cout << "wind direction: " << windDir.x << " " << windDir.y << " " << windDir.z << std::endl;
@@ -246,6 +259,7 @@ void Tester::Keyboard(int key,int x,int y) {
 		glm::vec3 rightpos = cloth->particles[cloth->width - 1]->position;
 		std::cout << "left corner pos: " << rightpos.x << " " << rightpos.y << " " << rightpos.z << std::endl;
 	}
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////

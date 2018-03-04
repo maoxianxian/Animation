@@ -13,4 +13,5 @@ public:
 	glm::mat4 GetWorldMatrix(int i);
 	std::string UpdateJoint(int index, int dof, float amount);
 	void setTranslate(float x, float y, float z);
+	void calculateDOFs(int index, float x, float y, float z);
 };
