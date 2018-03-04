@@ -57,6 +57,7 @@ void Triangle::ComputeAeroForce(glm::vec3 airV) {
 	area = area*glm::dot(v, normal) / glm::length(v);
 	float pc = 1;
 	glm::vec3 force = -0.5f*pc*glm::length(v)*glm::length(v)*area*normal;
+	//std::cout << glm::length(airV) << std::endl;
 	p1->ApplyForce(force / 3.0f);
 	p2->ApplyForce(force / 3.0f);
 	p3->ApplyForce(force / 3.0f);

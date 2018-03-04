@@ -33,6 +33,7 @@ public:
 	void Keyboard(int key,int x,int y);
 	void MouseButton(int btn,int state,int x,int y);
 	void MouseMotion(int x,int y);
+	void handleKeyboard(glm::vec3 dir);
 
 private:
 	// Window management
@@ -45,7 +46,6 @@ private:
 
 	// Components
 	glm::vec3 windDir = glm::vec3(0, 0, -3);
-	glm::vec3 currvec=windDir;
 	int state = 0;//wind
 	ShaderProgram *Program;
 	ShaderProgram *clothProgram;

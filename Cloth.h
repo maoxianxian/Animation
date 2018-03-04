@@ -8,6 +8,10 @@ public:
 	int height;
 	int width;
 	float prevtime;
+	float Springconst;
+	float blocksize;
+	float Damperconst;
+	glm::vec3 ori;
 	glm::mat4 modelmat;
 	std::vector<Triangle*> triangles;
 	std::vector<SpringDamper*> springs;
@@ -18,4 +22,6 @@ public:
 	void Update(glm::vec3 windDir);
 	void computeNormals();
 	void updateChildren(glm::vec3 windDir, float timediff);
+	void move(bool left, glm::vec3 dir);
+	void reset();
 };

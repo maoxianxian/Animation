@@ -20,10 +20,13 @@ void Particle::Update(float time) {
 	}
 	position += velocity*time;
 	if (position.y < -2) {
-		velocity = glm::vec3(velocity.x, abs(velocity.y), velocity.z);
-		if (abs(velocity.y) < 0.1f) {
-			velocity.y = 0.1f;
+		if (position.z == 0) {
+			position.z += 0.001f;
 		}
+		velocity = glm::vec3(velocity.x, abs(velocity.y), velocity.z);
+		/*if (abs(velocity.y) < 0.1f) {
+			velocity.y = 0.1f;
+		}*/
 	}
 }
 void Particle::ApplyForce(glm::vec3 newforce) {

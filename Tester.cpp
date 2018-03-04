@@ -75,7 +75,7 @@ Tester::Tester(const char *windowTitle,int argc,char **argv) {
 		skin = new Skin(argv[2], Skelet);
 		anime = new AnimationClip(argv[3]);
 	}
-	cloth = new Cloth(16, 64, 0.1f, 0.9f, 0.1f,glm::vec3(-1,2,0));//make sure damper const is not too big
+	cloth = new Cloth(16, 64, 0.1f, 0.9f, 0.1f,glm::vec3(-3,2,0));//make sure damper const is not too big
 	Cam->SetAspect(float(WinX)/float(WinY));
 }
 
@@ -118,8 +118,8 @@ void Tester::Update() {
 void Tester::Reset() {
 	Cam->Reset();
 	Cam->SetAspect(float(WinX)/float(WinY));
-
 	Cube->Reset();
+	cloth->reset();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -192,46 +192,59 @@ void Tester::Keyboard(int key,int x,int y) {
 			Skelet->UpdateJoint(focusJoint, 2, -0.1);
 			break;*/
 		case '=':
-			if (state<2)
+			if (state == 0)
 			{
 				state++;
+				std::cout << "holding left corner" << std::endl;
+			}
+			else if (state == 1)
+			{
+				state++;
+				std::cout << "holding right corner" << std::endl;
 			}
 			break;
 		case '-':
-			if (state > 0)
+			if (state == 1)
 			{
 				state--;
+				std::cout << "controlling wind" << std::endl;
+			}
+			else if (state == 2)
+			{
+				state--;
+				std::cout << "holding left corner" << std::endl;
 			}
 			break;
 		case '1':
-			currvec += glm::vec3(0.1f, 0, 0);
+			handleKeyboard(glm::vec3(0.1f, 0, 0));
 			break;
 		case '2':
-			currvec += glm::vec3(-0.1f, 0, 0);
+			handleKeyboard(glm::vec3(-0.1f, 0, 0));
 			break;
 		case '3':
-			currvec += glm::vec3(0, 0.1f, 0);
+			handleKeyboard(glm::vec3(0, 0.1f, 0));
 			break;
 		case '4':
-			currvec += glm::vec3(0, -0.1f, 0);
+			handleKeyboard(glm::vec3(0, -0.1f, 0));
 			break;
 		case '5':
-			currvec += glm::vec3(0, 0, 0.1f);
+			handleKeyboard(glm::vec3(0, 0, 0.1f));
 			break;
 		case '6':
-			currvec += glm::vec3(0, 0, -0.1f);
+			handleKeyboard(glm::vec3(0, 0, -0.1f));
 			break;
 
 		}
 	if (state == 0) {
-		windDir = currvec;
 		std::cout << "wind direction: " << windDir.x << " " << windDir.y << " " << windDir.z << std::endl;
 	}
 	if (state == 1) {
-
+		glm::vec3 leftpos = cloth->particles[0]->position;
+		std::cout << "left corner pos: " << leftpos.x<<" "<<leftpos.y<<" "<<leftpos.z << std::endl;
 	}
 	if (state == 2) {
-
+		glm::vec3 rightpos = cloth->particles[cloth->width - 1]->position;
+		std::cout << "left corner pos: " << rightpos.x << " " << rightpos.y << " " << rightpos.z << std::endl;
 	}
 }
 
@@ -274,3 +287,15 @@ void Tester::MouseMotion(int nx,int ny) {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+
+void Tester::handleKeyboard(glm::vec3 dir) {
+	if (state == 0) {
+		windDir += dir;
+	}
+	if (state == 1)	{
+		cloth->move(true, dir);
+	}
+	if (state == 2) {
+		cloth->move(false, dir);
+	}
+}
