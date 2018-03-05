@@ -1,5 +1,7 @@
 #include "Joint.h"
-Joint::Joint() {
+#include "Skeleton.h"
+
+Joint::Joint(Joint* parent) {
 	LocalMtx = glm::mat4(1.0f);
 	WorldMtx = glm::mat4(1.0f);
 	DOF *xDOF = new DOF(0, -100000, 100000);
@@ -20,7 +22,7 @@ void Joint::Load(Tokenizer &scanner, std::vector<Joint*> &joints)
 		//std::cout << buffer << std::endl;
 		if (std::string(buffer) == "balljoint")
 		{
-			Joint * temp = new Joint();
+			Joint * temp = new Joint(this);
 			joints.push_back(temp);
 			temp->Load(scanner, joints);
 			children.push_back(temp);
@@ -105,13 +107,7 @@ void Joint::Draw(const glm::mat4 &viewProjMtx, uint shader) {
 
 void Joint::Update(const glm::mat4 &parentMat)
 {
-	LocalMtx = glm::mat4(1.0f);
-	LocalMtx = LocalMtx*glm::rotate(glm::mat4(1.0f), DOFs[2]->val, glm::vec3(0, 0, 1));
-	LocalMtx = LocalMtx*glm::rotate(glm::mat4(1.0f), DOFs[1]->val, glm::vec3(0, 1, 0));
-	LocalMtx = LocalMtx*glm::rotate(glm::mat4(1.0f), DOFs[0]->val, glm::vec3(1, 0, 0));
-	LocalMtx = glm::translate(glm::mat4(1.0f), offset)*LocalMtx;
-	WorldMtx = parentMat*LocalMtx;
-
+	computeMatrices(parentMat);
 	for (int i = 0; i < children.size(); i++)
 	{
 		children[i]->Update(WorldMtx);
@@ -133,4 +129,76 @@ void Joint::UpdateDOF(float x,float y,float z)
 	DOFs[2]->setval(z);
 	//std::cout <<123456 << std::endl;
 
+}
+
+glm::vec3 Joint::calculatePos() {
+	glm::vec3 pos = WorldMtx*glm::vec4(0, 0, 0, 1);
+	return pos;
+}
+
+bool Joint::approachPos(glm::vec3 pos, Joint* target, Skeleton* skel) {
+	glm::vec3 r = calculatePos();
+	glm::vec3 e = target->calculatePos();
+	glm::vec3 step = 0.1f*(pos - e);
+	glm::mat4 zrot = glm::rotate(glm::mat4(1.0f), DOFs[2]->val, glm::vec3(0, 0, 1));
+	glm::mat4 yrot = glm::rotate(glm::mat4(1.0f), DOFs[1]->val, glm::vec3(0, 1, 0));
+	glm::vec3 prepos = e;
+
+	while (true) {
+		//x dof
+		glm::vec3 a = WorldMtx*zrot*yrot*glm::vec4(1, 0, 0, 0);
+		glm::vec3 column = glm::cross(a, e - r);
+		float change = glm::dot(column, step);
+		DOFs[0]->setval(DOFs[0]->val + change);
+		skel->Update();
+		if (glm::length(target->calculatePos() - pos) < 0.01f) {
+			//std::cout << "x" << std::endl;
+			return true;
+		}
+		else {
+			e = target->calculatePos();
+		}
+		//y dof
+		/*a = WorldMtx*zrot*glm::vec4(0, 1, 0, 0);
+		column = glm::cross(a, e - r);
+		change = glm::dot(column, step);
+		DOFs[1]->setval(DOFs[1]->val + change);
+		skel->Update();
+		if (glm::length(target->calculatePos() - pos) < 0.01f) {
+			//std::cout << e.x << " " << e.y << " " << e.z << std::endl;
+			//std::cout << "y" << std::endl;
+			return true;
+		}
+		else {
+			e = target->calculatePos();
+		}
+		//z dof
+		a = WorldMtx*glm::vec4(0, 0, 1, 0);
+		column = glm::cross(a, e - r);
+		change = glm::dot(column, step);
+		DOFs[2]->setval(DOFs[2]->val + change);
+		skel->Update();
+		if (glm::length(target->calculatePos() - pos) < 0.01f) {
+			//std::cout << "z" << std::endl;
+			return true;
+		}
+		else {
+			e = target->calculatePos();
+		}*/
+		//std::cout << glm::length(prepos - e) << std::endl;
+
+		if (glm::length(prepos - e) < 0.000001f) {
+			return false;
+		}
+		prepos = e;
+	}
+}
+
+void Joint::computeMatrices(const glm::mat4 &parentMat) {
+	LocalMtx = glm::mat4(1.0f);
+	LocalMtx = LocalMtx*glm::rotate(glm::mat4(1.0f), DOFs[2]->val, glm::vec3(0, 0, 1));
+	LocalMtx = LocalMtx*glm::rotate(glm::mat4(1.0f), DOFs[1]->val, glm::vec3(0, 1, 0));
+	LocalMtx = LocalMtx*glm::rotate(glm::mat4(1.0f), DOFs[0]->val, glm::vec3(1, 0, 0));
+	LocalMtx = glm::translate(glm::mat4(1.0f), offset)*LocalMtx;
+	WorldMtx = parentMat*LocalMtx;
 }

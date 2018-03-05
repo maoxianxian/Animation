@@ -244,8 +244,7 @@ void Tester::Keyboard(int key,int x,int y) {
 				iss >> x;
 				iss >> y;
 				iss >> z;
-				//std::cout << index<<" "<<x<<" "<<y<<" "<<z << std::endl;
-				//std::cout << line << std::endl;
+				Skelet->calculateDOFs(index, x, y, z);
 			}
 		}
 	if (state == 0) {
