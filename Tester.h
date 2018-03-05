@@ -56,6 +56,8 @@ private:
 	AnimationClip* anime;
 	Cloth* cloth;
 	int focusJoint = 0;
+	Model* target;
+	glm::vec3 targetpos;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

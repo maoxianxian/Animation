@@ -89,6 +89,7 @@ Tester::~Tester() {
 	delete Cam;
 	delete Skelet;
 	delete skin;
+	delete cloth;
 	glFinish();
 	glutDestroyWindow(WindowHandle);
 }
@@ -132,6 +133,9 @@ void Tester::Draw() {
 	Skelet->Draw(Cam->GetViewProjectMtx(), Program->GetProgramID());
 	//skin->Draw(Cam->GetViewProjectMtx(), Program->GetProgramID());
 	//cloth->Draw(Cam->GetViewProjectMtx(), clothProgram->GetProgramID());
+	if (target != NULL) {
+		target->Draw(glm::translate(glm::mat4(1.0f), targetpos), Cam->GetViewProjectMtx(), clothProgram->GetProgramID());
+	}
 	glFinish();
 	glutSwapBuffers();
 }
@@ -244,7 +248,11 @@ void Tester::Keyboard(int key,int x,int y) {
 				iss >> x;
 				iss >> y;
 				iss >> z;
+				targetpos = glm::vec3(x, y, z);
 				Skelet->calculateDOFs(index, x, y, z);
+				target = new Model();
+				Joint * join=Skelet->joints[index];
+				target->MakeBox(join->minBox, join->maxBox);
 			}
 		}
 	if (state == 0) {
