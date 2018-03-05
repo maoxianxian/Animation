@@ -124,7 +124,6 @@ void Joint::UpdateDOF(float x,float y,float z)
 	DOFs[0]->setval(x);
 	//std::cout << 123456 << std::endl;
 	DOFs[1]->setval(y);
-
 	DOFs[2]->setval(z);
 	//std::cout <<123456 << std::endl;
 
@@ -141,57 +140,53 @@ bool Joint::approachPos(glm::vec3 pos, Joint* target, Skeleton* skel) {
 	glm::mat4 zrot = glm::rotate(glm::mat4(1.0f), DOFs[2]->val, glm::vec3(0, 0, 1));
 	glm::mat4 yrot = glm::rotate(glm::mat4(1.0f), DOFs[1]->val, glm::vec3(0, 1, 0));
 	glm::vec3 prepos = e;
-	int ite = 0;
-	while (ite<50) {
-		glm::vec3 step = 0.1f*(pos - e);
-		//x dof
-		glm::vec3 a = WorldMtx*zrot*yrot*glm::vec4(1, 0, 0, 0);
-		glm::vec3 column = glm::cross(a, e - r);
-		float change = glm::dot(column, step);
-		DOFs[0]->setval(DOFs[0]->val + change);
-		skel->Update();
-		if (glm::length(target->calculatePos() - pos) < 0.01f) {
-			//std::cout << "x" << std::endl;
-			return true;
-		}
-		else {
-			e = target->calculatePos();
-		}
-		//y dof
-		a = WorldMtx*zrot*glm::vec4(0, 1, 0, 0);
-		column = glm::cross(a, e - r);
-		change = glm::dot(column, step);
-		DOFs[1]->setval(DOFs[1]->val + change);
-		skel->Update();
-		if (glm::length(target->calculatePos() - pos) < 0.01f) {
-			//std::cout << e.x << " " << e.y << " " << e.z << std::endl;
-			//std::cout << "y" << std::endl;
-			return true;
-		}
-		else {
-			e = target->calculatePos();
-		}
-		//z dof
-		a = WorldMtx*glm::vec4(0, 0, 1, 0);
-		column = glm::cross(a, e - r);
-		change = glm::dot(column, step);
-		DOFs[2]->setval(DOFs[2]->val + change);
-		skel->Update();
-		if (glm::length(target->calculatePos() - pos) < 0.01f) {
-			//std::cout << "z" << std::endl;
-			return true;
-		}
-		else {
-			e = target->calculatePos();
-		}
-		//std::cout << glm::length(prepos - e) << std::endl;
-
-		if (glm::length(prepos - e) < 0.001f) {
-			return false;
-		}
-		prepos = e;
-		ite++;
+	glm::vec3 step = 0.1f*(pos - e);
+	//x dof
+	glm::vec3 a = WorldMtx*zrot*yrot*glm::vec4(1, 0, 0, 0);
+	glm::vec3 column = glm::cross(a, e - r);
+	float change = glm::dot(column, step);
+	DOFs[0]->setval(DOFs[0]->val + change);
+	skel->Update();
+	if (glm::length(target->calculatePos() - pos) < 0.01f) {
+		//std::cout << "x" << std::endl;
+		return true;
 	}
+	else {
+		e = target->calculatePos();
+	}
+	//y dof
+	a = WorldMtx*zrot*glm::vec4(0, 1, 0, 0);
+	column = glm::cross(a, e - r);
+	change = glm::dot(column, step);
+	DOFs[1]->setval(DOFs[1]->val + change);
+	skel->Update();
+	if (glm::length(target->calculatePos() - pos) < 0.01f) {
+		//std::cout << e.x << " " << e.y << " " << e.z << std::endl;
+		//std::cout << "y" << std::endl;
+		return true;
+	}
+	else {
+		e = target->calculatePos();
+	}
+	//z dof
+	a = WorldMtx*glm::vec4(0, 0, 1, 0);
+	column = glm::cross(a, e - r);
+	change = glm::dot(column, step);
+	DOFs[2]->setval(DOFs[2]->val + change);
+	skel->Update();
+	if (glm::length(target->calculatePos() - pos) < 0.01f) {
+		//std::cout << "z" << std::endl;
+		return true;
+	}
+	else {
+		e = target->calculatePos();
+	}
+	//std::cout << glm::length(prepos - e) << std::endl;
+
+	if (glm::length(prepos - e) < 0.001f) {
+		return false;
+	}
+	prepos = e;
 	return false;
 }
 

@@ -249,7 +249,8 @@ void Tester::Keyboard(int key,int x,int y) {
 				iss >> y;
 				iss >> z;
 				targetpos = glm::vec3(x, y, z);
-				Skelet->calculateDOFs(index, x, y, z);
+
+				Skelet->begin(index, x, y, z);
 				target = new Model();
 				Joint * join=Skelet->joints[index];
 				target->MakeBox(join->minBox, join->maxBox);

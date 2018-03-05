@@ -24,6 +24,9 @@ void Skeleton::Load(const char * filename)
 }
 
 void Skeleton::Draw(const glm::mat4 &viewProjMtx, uint shader) {
+	if (ite != -1) {
+		calculateDOFs();
+	}
 	root->Draw(viewProjMtx,shader);
 }
 
@@ -45,25 +48,30 @@ void Skeleton::setTranslate(float x, float y, float z) {
 	translate = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, z));
 }
 
-void Skeleton::calculateDOFs(int index, float x, float y, float z) {
+void Skeleton::calculateDOFs() {
 	glm::vec3 prepos = joints[index]->calculatePos();
 	int ite = 0;
-	if (abs(glm::dot(glm::normalize(joints[index]->calculatePos()), glm::normalize(glm::vec3(x, y, z)))+1)<0.001f ) {
+	if (abs(glm::dot(glm::normalize(joints[index]->calculatePos()), glm::normalize(glm::vec3(x, y, z))) + 1) < 0.001f) {
 		z = z + 0.02f;
 	}
-
-	while (ite<25) {
-		for (int i = 0; i < index; i++) {
-			//for(int i=joints.size()-1;i>=0;i--){
-			if (joints[i]->approachPos(glm::vec3(x, y, z), joints[index], this)) {
-				return;
-			}
-		}
-		if (glm::length(joints[index]->calculatePos() - prepos) < 0.01f) {
+	for (int i = 0; i < index; i++) {
+		if (joints[i]->approachPos(glm::vec3(x, y, z), joints[index], this)) {
+			ite = -1;
 			return;
 		}
-		prepos = joints[index]->calculatePos();
-		ite++;
 	}
+	if (glm::length(joints[index]->calculatePos() - prepos) < 0.01f) {
+		ite = -1;
+		return;
+	}
+	prepos = joints[index]->calculatePos();
+	ite++;
 	//std::cout << joints[index]->calculatePos().x << " " << joints[index]->calculatePos().y << " " << joints[index]->calculatePos().z << std::endl;
+}
+void Skeleton::begin(int index, float x, float y, float z) {
+	this->index = index;
+	this->x = x;
+	this->y = y;
+	this->z = z;
+	this->ite = 0;
 }
