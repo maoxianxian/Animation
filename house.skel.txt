@@ -9,7 +9,7 @@ balljoint first {
 		boxmax 0.35 0.35 0.35
 		pose 0 0 0
 		balljoint third {
-			offset 0 0.65 0
+			offset 0.65 0 0
 			boxmin -0.3 -0.3 -0.3
 			boxmax 0.3 0.3 0.3
 			pose 0 0 0
@@ -19,7 +19,7 @@ balljoint first {
 				boxmax 0.25 0.25 0.25
 				pose 0 0 0
 				balljoint fourth {
-					offset 0 0.45 0
+					offset 0.45 0 0
 					boxmin -0.2 -0.2 -0.2
 					boxmax 0.2 0.2 0.2
 					pose 0 0 0

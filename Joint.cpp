@@ -139,12 +139,12 @@ glm::vec3 Joint::calculatePos() {
 bool Joint::approachPos(glm::vec3 pos, Joint* target, Skeleton* skel) {
 	glm::vec3 r = calculatePos();
 	glm::vec3 e = target->calculatePos();
-	glm::vec3 step = 0.1f*(pos - e);
 	glm::mat4 zrot = glm::rotate(glm::mat4(1.0f), DOFs[2]->val, glm::vec3(0, 0, 1));
 	glm::mat4 yrot = glm::rotate(glm::mat4(1.0f), DOFs[1]->val, glm::vec3(0, 1, 0));
 	glm::vec3 prepos = e;
-
-	while (true) {
+	int ite = 0;
+	while (ite<50) {
+		glm::vec3 step = 0.1f*(pos - e);
 		//x dof
 		glm::vec3 a = WorldMtx*zrot*yrot*glm::vec4(1, 0, 0, 0);
 		glm::vec3 column = glm::cross(a, e - r);
@@ -159,7 +159,7 @@ bool Joint::approachPos(glm::vec3 pos, Joint* target, Skeleton* skel) {
 			e = target->calculatePos();
 		}
 		//y dof
-		/*a = WorldMtx*zrot*glm::vec4(0, 1, 0, 0);
+		a = WorldMtx*zrot*glm::vec4(0, 1, 0, 0);
 		column = glm::cross(a, e - r);
 		change = glm::dot(column, step);
 		DOFs[1]->setval(DOFs[1]->val + change);
@@ -184,14 +184,16 @@ bool Joint::approachPos(glm::vec3 pos, Joint* target, Skeleton* skel) {
 		}
 		else {
 			e = target->calculatePos();
-		}*/
+		}
 		//std::cout << glm::length(prepos - e) << std::endl;
 
-		if (glm::length(prepos - e) < 0.000001f) {
+		if (glm::length(prepos - e) < 0.001f) {
 			return false;
 		}
 		prepos = e;
+		ite++;
 	}
+	return false;
 }
 
 void Joint::computeMatrices(const glm::mat4 &parentMat) {
