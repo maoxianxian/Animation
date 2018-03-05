@@ -196,7 +196,7 @@ void Tester::Keyboard(int key,int x,int y) {
 		case '6':
 			Skelet->UpdateJoint(focusJoint, 2, -0.1);
 			break;*/
-		case '=':
+		/*case '=':
 			if (state == 0)
 			{
 				state++;
@@ -237,7 +237,7 @@ void Tester::Keyboard(int key,int x,int y) {
 			break;
 		case '6':
 			handleKeyboard(glm::vec3(0, 0, -0.1f));
-			break;
+			break;*/
 		case 'i':
 			int index;
 			float x, y, z;

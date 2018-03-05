@@ -48,7 +48,11 @@ void Skeleton::setTranslate(float x, float y, float z) {
 void Skeleton::calculateDOFs(int index, float x, float y, float z) {
 	glm::vec3 prepos = joints[index]->calculatePos();
 	int ite = 0;
-	//while (ite<25) {
+	if (abs(glm::dot(glm::normalize(joints[index]->calculatePos()), glm::normalize(glm::vec3(x, y, z)))+1)<0.001f ) {
+		z = z + 0.02f;
+	}
+
+	while (ite<25) {
 		for (int i = 0; i < index; i++) {
 			//for(int i=joints.size()-1;i>=0;i--){
 			if (joints[i]->approachPos(glm::vec3(x, y, z), joints[index], this)) {
@@ -58,9 +62,8 @@ void Skeleton::calculateDOFs(int index, float x, float y, float z) {
 		if (glm::length(joints[index]->calculatePos() - prepos) < 0.01f) {
 			return;
 		}
-		std::cout << glm::length(joints[index]->calculatePos() - prepos) << std::endl;
 		prepos = joints[index]->calculatePos();
-		//ite++;
-	//}
+		ite++;
+	}
 	//std::cout << joints[index]->calculatePos().x << " " << joints[index]->calculatePos().y << " " << joints[index]->calculatePos().z << std::endl;
 }
