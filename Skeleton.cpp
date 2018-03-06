@@ -50,7 +50,6 @@ void Skeleton::setTranslate(float x, float y, float z) {
 
 void Skeleton::calculateDOFs() {
 	glm::vec3 prepos = joints[index]->calculatePos();
-	int ite = 0;
 	if (abs(glm::dot(glm::normalize(joints[index]->calculatePos()), glm::normalize(glm::vec3(x, y, z))) + 1) < 0.001f) {
 		z = z + 0.02f;
 	}
